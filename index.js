@@ -25,3 +25,10 @@ io.on('connection', function (socket) {
     io.emit('chat message', msg);
   });
 });
+
+
+var nsp = io.of('/my-namespace');
+nsp.on('connection', function(socket){
+  console.log('someone connected to namespace');
+  nsp.emit('hi', 'everyone!');
+});

@@ -25,6 +25,11 @@
       socket.on('user connected', function (msg) {
         $('#logs').append($('<div>').text(`User connected: ${msg}`));
       });
+
+      var nps = io('/my-namespace');
+      nps.on('hi', function (msg) {
+        console.log(msg);
+      });
     });
   </script>
   <ul id="messages"></ul>
