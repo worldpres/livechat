@@ -17,7 +17,7 @@
         return false;
       });
       socket.on('chat message', function (resp) {
-        $('#messages').append($('<li>').text(`${resp[0]} : ${resp[1]}`));
+        $('#messages').append($('<li>').text(`${resp[0]} (${resp[1]}) : ${resp[2]}`));
       });
       socket.on('user disconnected', function (msg) {
         $('#logs').append($('<div>').text(`User disconnected: ${msg}`));

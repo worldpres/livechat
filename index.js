@@ -27,7 +27,8 @@ io.on('connection', function (socket) {
   });
   socket.on('chat message', function(msg){
     console.log(`sent message by ${socket.id} (${nicknames[socket.id]}) : ${msg}`);
-    io.emit('chat message', [nicknames[socket.id], msg]);
+    let date = new Date().toLocaleString('pl-PL');
+    io.emit('chat message', [nicknames[socket.id], date, msg]);
   });
 });
 
