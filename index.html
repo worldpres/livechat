@@ -41,6 +41,20 @@
       nsp.on('who is online', function (users) {
         $('#online').text(Object.values(users).join(', '));
       });
+      $('form#message-send').submit(function () {
+        nsp.emit('nick change', $('#my-nick').val());
+        return false;
+      });
+      $('#message').keyup(function () {
+        nsp.emit('im writing', true);
+      });
+      $('#message').blur(function () {
+        nsp.emit('im writing', false);
+      });
+      nsp.on('writers', function (writers) {
+        if(writers.length) $('#writers').text(`${writers.join(', ')} ${(writers.length>1)?'are':'is'} typing...`);
+        else $('#writers').text(``);
+      });
 
     });
   </script>
@@ -51,6 +65,8 @@
   <form id="nick-change">
     <input id="my-nick" placeholder="Your nickname" autocomplete="off" /> <button>Change nick</button>
   </form>
+  
+  <aside id="writers"></aside>
 
   <aside id="logs"></aside>
   <aside>
