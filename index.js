@@ -14,12 +14,14 @@ http.listen(3000, function () {
 var io = require('socket.io')(http);
 
 io.on('connection', function (socket) {
-  console.log('a user connected');
+  console.log(`user connected: ${socket.id}`);
+  io.emit('user connected', socket.id);
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    console.log(`user disconnected:  ${socket.id}`);
+    io.emit('user disconnected', socket.id);
   });
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
+    console.log(`sent message by ${socket.id} : ${msg}`);
     io.emit('chat message', msg);
   });
 });

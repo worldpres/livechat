@@ -19,12 +19,22 @@
       socket.on('chat message', function (msg) {
         $('#messages').append($('<li>').text(msg));
       });
+      socket.on('user disconnected', function (msg) {
+        $('#logs').append($('<div>').text(`User disconnected: ${msg}`));
+      });
+      socket.on('user connected', function (msg) {
+        $('#logs').append($('<div>').text(`User connected: ${msg}`));
+      });
     });
   </script>
   <ul id="messages"></ul>
   <form>
-    <input id="m" autocomplete="off" /><button>Send</button>
+    <input id="m" autocomplete="off" /> <button>Send</button>
   </form>
+
+  <aside id="logs">
+
+  </aside>
 </body>
 
 </html>
