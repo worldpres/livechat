@@ -53,6 +53,9 @@ var writers = [];
 
 var nsp = io.of('/chat');
 nsp.on('connection', function (socket) {
+  socket.join('some room');
+  nsp.to('some room').emit('some room event', 'Witam w pokoju');
+
   console.log('someone connected to chat');
   nsp.emit('hi', 'You are connected to chat successfully!');
   socket.on('nick change', function (nick) {

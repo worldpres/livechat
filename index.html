@@ -53,6 +53,10 @@
         console.log(msg);
       });
 
+      nsp.on('some room event', function (msg) {
+        console.log(msg);
+      });
+
       $('form#nick-change').submit(function () {
         nsp.emit('nick change', $('#my-nick').val());
         return false;
