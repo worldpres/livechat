@@ -30,6 +30,23 @@ io.on('connection', function (socket) {
     let date = new Date().toLocaleString('pl-PL');
     io.emit('chat message', [nicknames[socket.id], date, msg]);
   });
+  //priv
+  socket.on('send priv', function (receive) {
+    console.log('Odebrałem: ',receive);
+    let id = socket.id.substr(socket.id.indexOf('#') + 1);
+    console.log('Od: ', id);
+    // socket.broadcast.to(id).emit('receive priv', '[receive[0], receive[1]]');
+    io.to(receive[0]).emit('receive priv', [id, receive[1]]);
+    // if (write) {
+    //   if (writers.indexOf(id) == -1) writers.push(id);
+    // }
+    // if (!write) {
+    //   if (writers.indexOf(id) != -1) writers.splice(writers.indexOf(id), 1);
+    // }
+    // console.log(writers.map(v => nicknames[v]));
+    // // console.log(`user ${socket.id} write something: ${write}`);
+    // nsp.emit('writers', writers.map(v => nicknames[v]));
+  });
 });
 
 var writers = [];

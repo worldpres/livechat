@@ -3,6 +3,12 @@
 
 <head>
   <title>Socket.IO chat</title>
+  <style>
+    .priv {
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -26,7 +32,20 @@
         $('#logs').append($('<div>').text(`User connected: ${msg}`));
       });
       socket.on('who is online', function (users) {
-        $('#online').text(Object.values(users).join(', '));
+        let usersTab = Object.values(users).map(v => `${v}<span id='${v}' class='priv'>&#9997;</span>`);
+        console.log(usersTab);
+        $('#online').html(usersTab.join(', '));
+        //priv
+        $('#online .priv').click(function () {
+          let id = $(this).attr('id');
+          console.log(id);
+          socket.emit('send priv', [id, prompt(`Wiadomość do ${id}`)]);
+          return false;
+        });
+      });
+      //priv
+      socket.on('receive priv', function (msg) {
+        alert(`${msg[0]} pisze:\n${msg[1]}`);
       });
 
       var nsp = io('/chat');
@@ -52,7 +71,7 @@
         nsp.emit('im writing', false);
       });
       nsp.on('writers', function (writers) {
-        if(writers.length) $('#writers').text(`${writers.join(', ')} ${(writers.length>1)?'are':'is'} typing...`);
+        if (writers.length) $('#writers').text(`${writers.join(', ')} ${(writers.length > 1) ? 'are' : 'is'} typing...`);
         else $('#writers').text(``);
       });
 
@@ -65,7 +84,7 @@
   <form id="nick-change">
     <input id="my-nick" placeholder="Your nickname" autocomplete="off" /> <button>Change nick</button>
   </form>
-  
+
   <aside id="writers"></aside>
 
   <aside id="logs"></aside>
