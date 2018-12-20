@@ -57,6 +57,8 @@ let ioChat = io.of('/chat');
 ioChat.on('connection', (socket) => {
 	let id = socket.id.substr(socket.id.indexOf('#') + 1);
 
+	io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, true);
+
 	function roomChange(roomName) {
 		if (/^[a-zA-Z0-9_-]+$/.test(roomName) || roomName == '') {
 			socket.join(roomName);
@@ -74,11 +76,12 @@ ioChat.on('connection', (socket) => {
 		if (/^[a-zA-Z0-9_-]+$/.test(nick)) {
 			users.find(v => v.id == id).name = nick;
 			io.emit('online users', users.map(v => v.name));
-			io.to(id).emit('nick changed or not', users.find(v => v.id == id).name, true);
+			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', nick, true);
 			// console.log(`user ${socket.id} changed nick to: ${nick}`);
 			// console.log(`users table:`, users);
 		}else{
-			io.to(id).emit('nick changed or not', users.find(v => v.id == id).name, false);
+			// priv to namespace /chat
+			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, false);
 		}
 	});
 

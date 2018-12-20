@@ -40,8 +40,8 @@
 				ioChat.emit('nick change', $('#my-nick').val());
 				return false;
 			});
-			socket.on('nick changed or not', (nick, changed) => {
-				if(!changed) alert(`Wpisz poprawne dane`);
+			ioChat.on('nick changed or not', (nick, changed) => {
+				if(!changed) alert(`Incorrect nickname`);
 				$('#my-nick').attr('placeholder', nick).val('');
 			});
 
