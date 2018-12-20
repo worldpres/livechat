@@ -22,7 +22,7 @@
 		$(function () {
 			let socket = io();
 			let ioChat = io('/chat');
-			
+
 			socket.on('online users', (users) => {
 				$('#online-users').text(users.join(', '));
 			});
@@ -41,10 +41,21 @@
 				return false;
 			});
 			ioChat.on('nick changed or not', (nick, changed) => {
-				if(!changed) alert(`Incorrect nickname`);
+				if (!changed) alert(`Incorrect nickname`);
 				$('#my-nick').attr('placeholder', nick).val('');
 			});
 
+			//who is typing
+			$('#message').keyup(() => {
+				ioChat.emit('im typing', true);
+			});
+			$('#message').blur(() => {
+				ioChat.emit('im typing', false);
+			});
+			ioChat.on('typers', function (typers) {
+				if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
+				else $('#typers').text(``);
+			});
 
 
 
@@ -85,23 +96,11 @@
 			});
 
 
-			ioChat.on('who is online', function (users) {
-				$('#online').text(Object.values(users).join(', '));
-			});
 			$('form#message-send').submit(function () {
 				ioChat.emit('nick change', $('#my-nick').val());
 				return false;
 			});
-			$('#message').keyup(function () {
-				ioChat.emit('im writing', true);
-			});
-			$('#message').blur(function () {
-				ioChat.emit('im writing', false);
-			});
-			ioChat.on('writers', function (writers) {
-				if (writers.length) $('#writers').text(`${writers.join(', ')} ${(writers.length > 1) ? 'are' : 'is'} typing...`);
-				else $('#writers').text(``);
-			});
+
 
 		});
 	</script>
@@ -122,12 +121,10 @@
 		<input id="message" placeholder="Your message" autocomplete="off" /> <button>Send</button>
 	</form>
 
-	<aside id="writers"></aside>
+	<aside id="typers"></aside>
 
-	<aside id="logs"></aside>
 	<aside>
-		<div>Online users:</div>
-		<div id="online-users"></div>
+		Online users: <span id="online-users"></span>
 	</aside>
 </body>
 

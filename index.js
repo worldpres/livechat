@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
 		name: `guest${new Date().getTime()}`,
 		namespace: `chat`,
 		room: ``,
+		typing: false,
 	});
 	io.emit('online users', users.map(v => v.name));
 	// console.log(`user connected: ${socket.id}`);
@@ -32,6 +33,10 @@ io.on('connection', (socket) => {
 		// console.log(`users table:`, users);
 	});
 });
+
+
+
+
 
 
 /*
@@ -49,7 +54,9 @@ socket.on('send priv', function (receive) {
 });
 */
 
-var writers = [];
+
+
+
 
 
 let ioChat = io.of('/chat');
@@ -79,26 +86,17 @@ ioChat.on('connection', (socket) => {
 			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', nick, true);
 			// console.log(`user ${socket.id} changed nick to: ${nick}`);
 			// console.log(`users table:`, users);
-		}else{
+		} else {
 			// priv to namespace /chat
 			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, false);
 		}
 	});
 
-
-
-
-	socket.on('im writing', function (write) {
-		let id = socket.id.substr(socket.id.indexOf('#') + 1);
-		if (write) {
-			if (writers.indexOf(id) == -1) writers.push(id);
-		}
-		if (!write) {
-			if (writers.indexOf(id) != -1) writers.splice(writers.indexOf(id), 1);
-		}
-		console.log(writers.map(v => users[v]));
-		// console.log(`user ${socket.id} write something: ${write}`);
-		ioChat.emit('writers', writers.map(v => users[v]));
+	//who is typing
+	socket.on('im typing', (typing) => {
+		users.find(v => v.id == id).typing = typing;
+		ioChat.emit('typers', users.filter(v => v.typing).map(v => v.name));
+		// console.log(`user ${socket.id} write something? ${typing}`);
 	});
 
 });
