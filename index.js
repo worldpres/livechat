@@ -19,6 +19,8 @@ io.on('connection', (socket) => {
 		id: socket.id,
 		name: `guest${new Date().getTime()}`,
 		typing: false,
+		waiting: false,
+		playing: false,
 	});
 	io.emit('online users', users.map(v => v.name));
 	// console.log(`user connected: ${socket.id}`);
@@ -74,6 +76,6 @@ ioChat.on('connection', (socket) => {
 
 
 //play
-let ioChat = io.of('/play');
+let ioPlay = io.of('/play');
 
 });
