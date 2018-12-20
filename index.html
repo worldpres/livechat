@@ -2,100 +2,133 @@
 <html>
 
 <head>
-  <title>Socket.IO chat</title>
-  <style>
-    .priv {
-      font-size: 30px;
-      cursor: pointer;
-    }
-  </style>
+	<title>Socket.IO</title>
+	<style>
+		.priv {
+			font-size: 30px;
+			cursor: pointer;
+		}
+
+		form {
+			display: inline-block;
+		}
+	</style>
 </head>
 
 <body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-  <script>
-    $(function () {
-      var socket = io();
-      $('form#message-send').submit(function () {
-        socket.emit('chat message', $('#message').val());
-        $('#message').val('');
-        return false;
-      });
-      socket.on('chat message', function (resp) {
-        $('#messages').append($('<li>').text(`${resp[0]} (${resp[1]}) : ${resp[2]}`));
-      });
-      socket.on('user disconnected', function (msg) {
-        $('#logs').append($('<div>').text(`User disconnected: ${msg}`));
-      });
-      socket.on('user connected', function (msg) {
-        $('#logs').append($('<div>').text(`User connected: ${msg}`));
-      });
-      socket.on('who is online', function (users) {
-        let usersTab = Object.values(users).map(v => `${v}<span id='${v}' class='priv'>&#9997;</span>`);
-        console.log(usersTab);
-        $('#online').html(usersTab.join(', '));
-        //priv
-        $('#online .priv').click(function () {
-          let id = $(this).attr('id');
-          console.log(id);
-          socket.emit('send priv', [id, prompt(`Wiadomość do ${id}`)]);
-          return false;
-        });
-      });
-      //priv
-      socket.on('receive priv', function (msg) {
-        alert(`${msg[0]} pisze:\n${msg[1]}`);
-      });
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+		$(function () {
+			let socket = io();
+			let ioChat = io('/chat');
+			
+			socket.on('online users', (users) => {
+				$('#online-users').text(users.join(', '));
+			});
 
-      var nsp = io('/chat');
-      nsp.on('hi', function (msg) {
-        console.log(msg);
-      });
+			//chat-join
+			$('nav #chat-join').click(() => {
+				ioChat.emit('chat join', 'main-room');
+			});
+			ioChat.on('welcome to chat', (msg) => {
+				console.log(msg);
+			});
 
-      nsp.on('some room event', function (msg) {
-        console.log(msg);
-      });
+			//nick-change
+			$('nav form#nick-change').submit(() => {
+				ioChat.emit('nick change', $('#my-nick').val());
+				return false;
+			});
+			socket.on('nick changed or not', (nick, changed) => {
+				if(!changed) alert(`Wpisz poprawne dane`);
+				$('#my-nick').attr('placeholder', nick).val('');
+			});
 
-      $('form#nick-change').submit(function () {
-        nsp.emit('nick change', $('#my-nick').val());
-        return false;
-      });
-      nsp.on('who is online', function (users) {
-        $('#online').text(Object.values(users).join(', '));
-      });
-      $('form#message-send').submit(function () {
-        nsp.emit('nick change', $('#my-nick').val());
-        return false;
-      });
-      $('#message').keyup(function () {
-        nsp.emit('im writing', true);
-      });
-      $('#message').blur(function () {
-        nsp.emit('im writing', false);
-      });
-      nsp.on('writers', function (writers) {
-        if (writers.length) $('#writers').text(`${writers.join(', ')} ${(writers.length > 1) ? 'are' : 'is'} typing...`);
-        else $('#writers').text(``);
-      });
 
-    });
-  </script>
-  <ul id="messages"></ul>
-  <form id="message-send">
-    <input id="message" placeholder="Your message" autocomplete="off" /> <button>Send</button>
-  </form>
-  <form id="nick-change">
-    <input id="my-nick" placeholder="Your nickname" autocomplete="off" /> <button>Change nick</button>
-  </form>
 
-  <aside id="writers"></aside>
 
-  <aside id="logs"></aside>
-  <aside>
-    <div>Online users:</div>
-    <div id="online"></div>
-  </aside>
+
+
+
+
+
+			/*
+			$('#online-users').html(users.map(v => `${v}<span id='${v}' class='priv'>&#9997;</span>`).join(', '));
+			//priv
+			$('#online-users .priv').click(function () {
+			  let id = $(this).attr('id');
+			  console.log(id);
+			  socket.emit('send priv', [id, prompt(`Wiadomość do ${id}`)]);
+			  return false;
+			});
+			*/
+
+			$('form#message-send').submit(function () {
+				socket.emit('chat message', $('#message').val());
+				$('#message').val('');
+				return false;
+			});
+			socket.on('chat message', function (resp) {
+				$('#messages').append($('<li>').text(`${resp[0]} (${resp[1]}) : ${resp[2]}`));
+			});
+
+			//priv
+			socket.on('receive priv', function (msg) {
+				alert(`${msg[0]} pisze:\n${msg[1]}`);
+			});
+
+
+
+			ioChat.on('some room event', function (msg) {
+				console.log(msg);
+			});
+
+
+			ioChat.on('who is online', function (users) {
+				$('#online').text(Object.values(users).join(', '));
+			});
+			$('form#message-send').submit(function () {
+				ioChat.emit('nick change', $('#my-nick').val());
+				return false;
+			});
+			$('#message').keyup(function () {
+				ioChat.emit('im writing', true);
+			});
+			$('#message').blur(function () {
+				ioChat.emit('im writing', false);
+			});
+			ioChat.on('writers', function (writers) {
+				if (writers.length) $('#writers').text(`${writers.join(', ')} ${(writers.length > 1) ? 'are' : 'is'} typing...`);
+				else $('#writers').text(``);
+			});
+
+		});
+	</script>
+
+	<nav>
+		<button id="chat-join">Join to chat</button>
+		<form id="nick-change">
+			<input id="my-nick" placeholder="Your nickname" autocomplete="off" /> <button>Change nick</button>
+		</form>
+	</nav>
+
+
+
+
+
+	<ul id="messages"></ul>
+	<form id="message-send">
+		<input id="message" placeholder="Your message" autocomplete="off" /> <button>Send</button>
+	</form>
+
+	<aside id="writers"></aside>
+
+	<aside id="logs"></aside>
+	<aside>
+		<div>Online users:</div>
+		<div id="online-users"></div>
+	</aside>
 </body>
 
 </html>

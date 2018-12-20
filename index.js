@@ -1,81 +1,101 @@
-var app = require('express')();
-var http = require('http').Server(app);
+const app = require('express')();
+const http = require('http').Server(app);
+const ip = require('ip');
+const io = require('socket.io')(http);
+const port = process.env.PORT || 3000;
 
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+http.listen(port, () => {
+	console.log(`listening on ${ip.address()}:${port}`);
 });
 
-let port = process.env.PORT || 3000;
-http.listen(port, function () {
-  console.log('listening on *:3000');
+app.get('/', (req, res) => {
+	res.sendFile(__dirname + `/index.html`);
+});
+
+let users = [];
+
+io.on('connection', (socket) => {
+	users.push({
+		id: socket.id,
+		name: `guest${new Date().getTime()}`,
+		namespace: `chat`,
+		room: ``,
+	});
+	io.emit('online users', users.map(v => v.name));
+	// console.log(`user connected: ${socket.id}`);
+	// console.log(`users table:`, users);
+
+	socket.on('disconnect', () => {
+		users = users.filter(v => v.id != socket.id);
+		io.emit('online users', users.map(v => v.name));
+		// console.log(`user disconnected:  ${socket.id}`);
+		// console.log(`users table:`, users);
+	});
 });
 
 
-var nicknames = {};
-
-var io = require('socket.io')(http);
-io.on('connection', function (socket) {
-  console.log(`user connected: ${socket.id}`);
-  nicknames[socket.id] = socket.id;
-  io.emit('user connected', socket.id);
-  io.emit('who is online', nicknames);
-  socket.on('disconnect', function () {
-    console.log(`user disconnected:  ${socket.id}`);
-    delete nicknames[socket.id];
-    io.emit('user disconnected', socket.id);
-    io.emit('who is online', nicknames);
-  });
-  socket.on('chat message', function (msg) {
-    console.log(`sent message by ${socket.id} (${nicknames[socket.id]}) : ${msg}`);
-    let date = new Date().toLocaleString('pl-PL');
-    io.emit('chat message', [nicknames[socket.id], date, msg]);
-  });
-  //priv
-  socket.on('send priv', function (receive) {
-    console.log('Odebrałem: ',receive);
-    let id = socket.id.substr(socket.id.indexOf('#') + 1);
-    console.log('Od: ', id);
-    // socket.broadcast.to(id).emit('receive priv', '[receive[0], receive[1]]');
-    io.to(receive[0]).emit('receive priv', [id, receive[1]]);
-    // if (write) {
-    //   if (writers.indexOf(id) == -1) writers.push(id);
-    // }
-    // if (!write) {
-    //   if (writers.indexOf(id) != -1) writers.splice(writers.indexOf(id), 1);
-    // }
-    // console.log(writers.map(v => nicknames[v]));
-    // // console.log(`user ${socket.id} write something: ${write}`);
-    // nsp.emit('writers', writers.map(v => nicknames[v]));
-  });
+/*
+socket.on('chat message', function (msg) {
+  console.log(`sent message by ${socket.id} (${users[socket.id]}) : ${msg}`);
+  let date = new Date().toLocaleString('pl-PL');
+  io.emit('chat message', [users[socket.id], date, msg]);
 });
+//priv
+socket.on('send priv', function (receive) {
+  console.log('Odebrałem: ', receive);
+  let id = socket.id.substr(socket.id.indexOf('#') + 1);
+  console.log('Od: ', id);
+  io.to(receive[0]).emit('receive priv', [id, receive[1]]);
+});
+*/
 
 var writers = [];
 
-var nsp = io.of('/chat');
-nsp.on('connection', function (socket) {
-  socket.join('some room');
-  nsp.to('some room').emit('some room event', 'Witam w pokoju');
 
-  console.log('someone connected to chat');
-  nsp.emit('hi', 'You are connected to chat successfully!');
-  socket.on('nick change', function (nick) {
-    let id = socket.id.substr(socket.id.indexOf('#') + 1);
-    nicknames[id] = nick;
-    console.log(nicknames);
-    console.log(`user ${socket.id} changed nick: ${nick}`);
-    nsp.emit('who is online', nicknames);
-  });
-  socket.on('im writing', function (write) {
-    let id = socket.id.substr(socket.id.indexOf('#') + 1);
-    if (write) {
-      if (writers.indexOf(id) == -1) writers.push(id);
-    }
-    if (!write) {
-      if (writers.indexOf(id) != -1) writers.splice(writers.indexOf(id), 1);
-    }
-    console.log(writers.map(v => nicknames[v]));
-    // console.log(`user ${socket.id} write something: ${write}`);
-    nsp.emit('writers', writers.map(v => nicknames[v]));
-  });
+let ioChat = io.of('/chat');
+
+ioChat.on('connection', (socket) => {
+	let id = socket.id.substr(socket.id.indexOf('#') + 1);
+
+	function roomChange(roomName) {
+		if (/^[a-zA-Z0-9_-]+$/.test(roomName) || roomName == '') {
+			socket.join(roomName);
+			users.find(v => v.id == id).room = roomName;
+			ioChat.to(roomName).emit('welcome to chat', (roomName != '') ? `You are connected to chat: ${roomName}!` : `Bye!`);
+			// console.log(`user ${id} changed /chat room: ${roomName}`);
+		}
+	}
+
+	socket.on('chat join', (room) => {
+		roomChange(room);
+	});
+
+	socket.on('nick change', function (nick) {
+		if (/^[a-zA-Z0-9_-]+$/.test(nick)) {
+			users.find(v => v.id == id).name = nick;
+			io.emit('online users', users.map(v => v.name));
+			io.to(id).emit('nick changed or not', users.find(v => v.id == id).name, true);
+			// console.log(`user ${socket.id} changed nick to: ${nick}`);
+			// console.log(`users table:`, users);
+		}else{
+			io.to(id).emit('nick changed or not', users.find(v => v.id == id).name, false);
+		}
+	});
+
+
+
+
+	socket.on('im writing', function (write) {
+		let id = socket.id.substr(socket.id.indexOf('#') + 1);
+		if (write) {
+			if (writers.indexOf(id) == -1) writers.push(id);
+		}
+		if (!write) {
+			if (writers.indexOf(id) != -1) writers.splice(writers.indexOf(id), 1);
+		}
+		console.log(writers.map(v => users[v]));
+		// console.log(`user ${socket.id} write something: ${write}`);
+		ioChat.emit('writers', writers.map(v => users[v]));
+	});
 
 });
