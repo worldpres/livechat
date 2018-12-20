@@ -40,6 +40,7 @@ let ioChat = io.of('/chat');
 ioChat.on('connection', (socket) => {
 	let id = socket.id.substr(socket.id.indexOf('#') + 1);
 
+	//show nickname into placeholder
 	io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, true);
 
 	function roomChange(roomName) {
@@ -83,16 +84,14 @@ ioChat.on('connection', (socket) => {
 		// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
 	});
 
-
-
-
-
-	/* //priv
+	/*
+	//priv
 	socket.on('send priv', function (receive) {
 		console.log('Odebrałem: ', receive);
 		let id = socket.id.substr(socket.id.indexOf('#') + 1);
 		console.log('Od: ', id);
 		io.to(receive[0]).emit('receive priv', [id, receive[1]]);
-	}); */
+	});
+	*/
 
 });

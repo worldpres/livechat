@@ -1,0 +1,1 @@
+powitanie w pokoju tylko dla konkretnego gości
