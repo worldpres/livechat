@@ -65,10 +65,12 @@ ioChat.on('connection', (socket) => {
 
 	//send message
 	socket.on('message send', (msg) => {
-		let name = users.find(v => v.id == id).name;
-		let date = new Date().toLocaleString('pl-PL');
-		ioChat.emit('message sent', name, date, msg);
-		// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
+		if (msg != '') {
+			let name = users.find(v => v.id == id).name;
+			let date = new Date().toLocaleString('pl-PL');
+			ioChat.emit('message sent', name, date, msg);
+			// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
+		}
 	});
 
 });
