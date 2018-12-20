@@ -18,8 +18,6 @@ io.on('connection', (socket) => {
 	users.push({
 		id: socket.id,
 		name: `guest${new Date().getTime()}`,
-		namespace: `chat`,
-		room: ``,
 		typing: false,
 	});
 	io.emit('online users', users.map(v => v.name));
@@ -61,6 +59,7 @@ ioChat.on('connection', (socket) => {
 		users.find(v => v.id == id).typing = typing;
 		ioChat.emit('typers', users.filter(v => v.typing).map(v => v.name));
 		// console.log(`user ${socket.id} write something? ${typing}`);
+		console.log(users);
 	});
 
 	//send message
@@ -72,5 +71,9 @@ ioChat.on('connection', (socket) => {
 			// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
 		}
 	});
+
+
+//play
+let ioChat = io.of('/play');
 
 });
