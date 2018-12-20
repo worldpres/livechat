@@ -52,11 +52,20 @@
 			$('#message').blur(() => {
 				ioChat.emit('im typing', false);
 			});
-			ioChat.on('typers', function (typers) {
+			ioChat.on('typers', (typers) => {
 				if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
 				else $('#typers').text(``);
 			});
 
+			//message send
+			$('form#message-send').submit(() => {
+				ioChat.emit('message send', $('#message').val());
+				$('#message').val('');
+				return false;
+			});
+			ioChat.on('message sent', (name, date, msg) => {
+				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
+			});
 
 
 
@@ -75,14 +84,6 @@
 			});
 			*/
 
-			$('form#message-send').submit(function () {
-				socket.emit('chat message', $('#message').val());
-				$('#message').val('');
-				return false;
-			});
-			socket.on('chat message', function (resp) {
-				$('#messages').append($('<li>').text(`${resp[0]} (${resp[1]}) : ${resp[2]}`));
-			});
 
 			//priv
 			socket.on('receive priv', function (msg) {

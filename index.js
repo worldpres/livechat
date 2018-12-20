@@ -34,31 +34,7 @@ io.on('connection', (socket) => {
 	});
 });
 
-
-
-
-
-
-/*
-socket.on('chat message', function (msg) {
-  console.log(`sent message by ${socket.id} (${users[socket.id]}) : ${msg}`);
-  let date = new Date().toLocaleString('pl-PL');
-  io.emit('chat message', [users[socket.id], date, msg]);
-});
-//priv
-socket.on('send priv', function (receive) {
-  console.log('Odebrałem: ', receive);
-  let id = socket.id.substr(socket.id.indexOf('#') + 1);
-  console.log('Od: ', id);
-  io.to(receive[0]).emit('receive priv', [id, receive[1]]);
-});
-*/
-
-
-
-
-
-
+//chat
 let ioChat = io.of('/chat');
 
 ioChat.on('connection', (socket) => {
@@ -98,5 +74,25 @@ ioChat.on('connection', (socket) => {
 		ioChat.emit('typers', users.filter(v => v.typing).map(v => v.name));
 		// console.log(`user ${socket.id} write something? ${typing}`);
 	});
+
+	//send message
+	socket.on('message send', (msg) => {
+		let name = users.find(v=>v.id==id).name;
+		let date = new Date().toLocaleString('pl-PL');
+		ioChat.emit('message sent', name, date, msg);
+		// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
+	});
+
+
+
+
+
+	/* //priv
+	socket.on('send priv', function (receive) {
+		console.log('Odebrałem: ', receive);
+		let id = socket.id.substr(socket.id.indexOf('#') + 1);
+		console.log('Od: ', id);
+		io.to(receive[0]).emit('receive priv', [id, receive[1]]);
+	}); */
 
 });
