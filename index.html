@@ -27,14 +27,6 @@
 				$('#online-users').text(users.join(', '));
 			});
 
-			//chat-join
-			$('nav #chat-join').click(() => {
-				ioChat.emit('chat join', 'main-room');
-			});
-			ioChat.on('welcome to chat', (msg) => {
-				console.log(msg);
-			});
-
 			//nick-change
 			$('nav form#nick-change').submit(() => {
 				ioChat.emit('nick change', $('#my-nick').val());
@@ -67,27 +59,10 @@
 				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
 			});
 
-			/*
-			//priv
-			socket.on('receive priv', function (msg) {
-				alert(`${msg[0]} pisze:\n${msg[1]}`);
-			});
-
-			$('#online-users').html(users.map(v => `${v}<span id='${v}' class='priv'>&#9997;</span>`).join(', '));
-			//priv
-
-			$('#online-users .priv').click(function () {
-			  let id = $(this).attr('id');
-			  console.log(id);
-			  socket.emit('send priv', [id, prompt(`Wiadomość do ${id}`)]);
-			  return false;
-			});
-			*/
 		});
 	</script>
 
 	<nav>
-		<button id="chat-join">Join to chat</button>
 		<form id="nick-change">
 			<input id="my-nick" placeholder="Your nickname" autocomplete="off" /> <button>Change nick</button>
 		</form>

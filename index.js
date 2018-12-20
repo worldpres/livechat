@@ -43,20 +43,7 @@ ioChat.on('connection', (socket) => {
 	//show nickname into placeholder
 	io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, true);
 
-	function roomChange(roomName) {
-		if (/^[a-zA-Z0-9_-]+$/.test(roomName) || roomName == '') {
-			socket.join(roomName);
-			users.find(v => v.id == id).room = roomName;
-			ioChat.to(roomName).emit('welcome to chat', (roomName != '') ? `You are connected to chat: ${roomName}!` : `Bye!`);
-			// console.log(`user ${id} changed /chat room: ${roomName}`);
-		}
-	}
-
-	socket.on('chat join', (room) => {
-		roomChange(room);
-	});
-
-	socket.on('nick change', function (nick) {
+	socket.on('nick change', (nick) => {
 		if (/^[a-zA-Z0-9_-]+$/.test(nick)) {
 			users.find(v => v.id == id).name = nick;
 			io.emit('online users', users.map(v => v.name));
@@ -78,20 +65,10 @@ ioChat.on('connection', (socket) => {
 
 	//send message
 	socket.on('message send', (msg) => {
-		let name = users.find(v=>v.id==id).name;
+		let name = users.find(v => v.id == id).name;
 		let date = new Date().toLocaleString('pl-PL');
 		ioChat.emit('message sent', name, date, msg);
 		// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
 	});
-
-	/*
-	//priv
-	socket.on('send priv', function (receive) {
-		console.log('Odebrałem: ', receive);
-		let id = socket.id.substr(socket.id.indexOf('#') + 1);
-		console.log('Od: ', id);
-		io.to(receive[0]).emit('receive priv', [id, receive[1]]);
-	});
-	*/
 
 });
