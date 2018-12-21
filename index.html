@@ -21,16 +21,26 @@
 	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
 		$(() => {
-
-// one context per document
-var context = new (window.AudioContext || window.webkitAudioContext)();
-var osc = context.createOscillator(); // instantiate an oscillator
-osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-osc.frequency.value = 440; // Hz
-osc.connect(context.destination); // connect it to the destination
-osc.start(); // start the oscillator
-osc.stop(context.currentTime + 2); // stop 2 seconds after the current time
-
+			//SOUND
+			playSound = (time = 25, freq = 861.6, type = 'triangle', volume = 0.4, pretty = false) => {
+				let ctx = new AudioContext(); // one context per document
+				let osc = ctx.createOscillator(); // instantiate an oscillator
+				let vol = ctx.createGain();
+				vol.gain.value = volume; // from 0 to 1, 1 full volume, 0 is muted
+				osc.type = type; // this is the default - also square, sawtooth, triangle
+				osc.frequency.value = freq; //Hz
+				// osc.connect(ctx.destination); // connect it to the destination
+				osc.connect(vol); // connect osc to vol
+				vol.connect(ctx.destination); // connect vol to context destination
+				osc.start(ctx.currentTime); // start the oscillator
+				if (pretty) vol.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + time / 1000); //pretty sound
+				setTimeout(() => {
+					osc.stop(ctx.currentTime); // stop 2 seconds after the current time
+					vol.disconnect(ctx.destination);
+					osc.disconnect(vol);
+					osc = vol = ctx = null;
+				}, time);
+			}
 
 
 			//SOCKET
@@ -67,6 +77,10 @@ osc.stop(context.currentTime + 2); // stop 2 seconds after the current time
 			$('form#message-send').submit(() => {
 				ioChat.emit('message send', $('#message').val());
 				$('#message').val('');
+				$('form#message-send button').attr('disabled', 'disabled');
+				setTimeout(() => {
+					$('form#message-send button').removeAttr('disabled');
+				}, 2000);
 				return false;
 			});
 			ioChat.on('message sent', (name, date, msg) => {
@@ -75,6 +89,7 @@ osc.stop(context.currentTime + 2); // stop 2 seconds after the current time
 				// autoscroll: y-x <= 160
 				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
 				if ($('#autoscroll')[0].checked) $("#messages").scrollTop($("#messages")[0].scrollHeight);
+				playSound(); //time, freq, type, volume
 			});
 
 		});
