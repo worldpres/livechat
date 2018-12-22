@@ -88,7 +88,10 @@
 				//let y = $("#messages")[0].scrollHeight;
 				// autoscroll: y-x <= 160
 				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
-				if ($('#autoscroll')[0].checked) $("#messages").scrollTop($("#messages")[0].scrollHeight);
+				if ($('#autoscroll')[0].checked) {
+					$('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+					//$('#messages').scrollTop($('#messages')[0].scrollHeight);
+				}
 				playSound(); //time, freq, type, volume
 			});
 
