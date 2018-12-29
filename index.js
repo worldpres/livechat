@@ -12,6 +12,10 @@ app.get('/', (req, res) => {
 	res.sendFile(__dirname + `/index.html`);
 });
 
+app.get('/sheep', (req, res) => {
+	res.sendFile(__dirname + `/sheep.html`);
+});
+
 let users = [];
 
 io.on('connection', (socket) => {
