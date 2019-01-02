@@ -49,6 +49,13 @@
 				$('#online-users').html(users.map(v=>`${v}<span onclick="privMessage('${v}')">&#x1F4DD;</span>`).join(', '));
 			});
 
+			//previous messages
+			ioChat.on('previous messages', (messages) => {
+				if(messages.length) messages.map(v => {
+					$('#messages').append($('<li>').text(`${v.name} (${v.date}) : ${v.msg}`));
+				});
+			});
+
 			//nick-change
 			$('nav form#nick-change').submit(() => {
 				ioChat.emit('nick change', $('#my-nick').val());

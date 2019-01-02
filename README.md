@@ -4,7 +4,7 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext*
 
 ## TODO
-- ostatnie 10 wiadomosci w tablicy/bazie
+- previous messages saved in mongodb.
 
 ### About WebSocket
 
