@@ -92,9 +92,17 @@
 				$('#existing-rooms').text(rooms.join(', '));
 			});
 
+			simpleMessage = (to) => {
+				ioChat.emit('simple message', to, prompt(`Your message to ${to}...`));
+			}
 			//my rooms update
 			ioChat.on('my rooms', (rooms) => {
-				$('#my-rooms').text(rooms.join(', '));
+				$('#my-rooms').html(rooms.map(v=>`<span onclick="simpleMessage('${v}')">${v}</span>`).join(', '));
+			});
+
+			//
+			ioChat.on('simple message', (name, date, msg, to) => {
+				alert(`From: ${name}\nRoom: ${to}\nDate: ${date}\nMessage: ${msg}`);
 			});
 		});
 	</script>

@@ -40,7 +40,7 @@ ioChat.on('connection', (socket) => {
 	const id = socket.id.substr(socket.id.indexOf('#') + 1);
 
 	// existing rooms into namespace
-	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v=>v[0]!='/'));
+	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
 
 	//show nickname into placeholder by emit to sender-client only
 	socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
@@ -79,7 +79,16 @@ ioChat.on('connection', (socket) => {
 			users.find(v => v.id == id).rooms.push(room);
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			// existing rooms into namespace
-			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v=>v[0]!='/'));
+			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
+		}
+	});
+
+	//simple message
+	socket.on('simple message', (to, msg) => {
+		if (msg != '' && msg != null) {
+			let name = users.find(v => v.id == id).name;
+			let date = new Date().toLocaleString('pl-PL');
+			socket.broadcast.to(to).emit('simple message', name, date, msg, to);
 		}
 	});
 });
