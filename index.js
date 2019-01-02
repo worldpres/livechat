@@ -107,7 +107,7 @@ ioChat.on('connection', (socket) => {
 
 	//message to room
 	socket.on('message to room', (to, msg) => {
-		if (msg != '' && msg != null) {
+		if (msg != '' && msg != null && users.find(v => v.id == id).rooms.filter(v => v == to).length == 1) {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
 			socket.broadcast.to(to).emit('message to room', name, date, msg, to);

@@ -5,7 +5,6 @@
 
 ## TODO
 - liczebnosc w pokojach
-- sprawdzenie czy wyslamy do dobrego pokoju - właściwosc rooms usera
 - ostatnie 10 wiadomosci w tablicy/bazie
 
 ### About WebSocket
