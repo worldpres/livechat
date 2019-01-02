@@ -4,7 +4,6 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext*
 
 ## TODO
-- ikony wyslania priv/simple message
 - wychodzenie z pokoju,
 - szybkie wbicie do pokoju, (leave)
 - liczebnosc w pokojach

@@ -33,8 +33,6 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('priv message', (to, msg) => {
-		console.log(to);
-		console.log(msg);
 		if (msg != '' && msg != null) {
 			let toId = users.find(v => v.name == to).id;
 			let name = users.find(v => v.id == socket.id).name;

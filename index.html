@@ -46,7 +46,7 @@
 			});
 
 			socket.on('online users', (users) => {
-				$('#online-users').html(users.map(v=>`<span onclick="privMessage('${v}')">${v}</span>`).join(', '));
+				$('#online-users').html(users.map(v=>`${v}<span onclick="privMessage('${v}')">&#x1F4DD;</span>`).join(', '));
 			});
 
 			//nick-change
@@ -105,7 +105,7 @@
 			}
 			//my rooms update
 			ioChat.on('my rooms', (rooms) => {
-				$('#my-rooms').html(rooms.map(v=>`<span onclick="simpleMessage('${v}')">${v}</span>`).join(', '));
+				$('#my-rooms').html(rooms.map(v=>`${v}<span onclick="simpleMessage('${v}')">&#x1F4DD;&#x274C</span>`).join(', '));
 			});
 
 			//simple message
