@@ -1,11 +1,19 @@
 # Live Chat
 
-FRONT: HTML + CSS + Javascript/jQuery
-BACK: NodeJS + Socket.IO + AudioContext
+**FRONT**: *HTML* + *CSS* + *Javascript/jQuery*
+**BACK**: *NodeJS* + *Socket.IO* + AudioContext
 
-### Cheat sheet
-> To send a message to a specific client you need to do it like so:
-> socket.broadcast.to(socketid).emit('message', 'for your eyes only');
+### About WebSocket
+
+WebSocket jest technologią zapewniającą dwukierunkowy kanał komunikacji za pośrednictwem jednego gniazda TCP. Stworzono ją do komunikacji przeglądarki internetowej z serwerem internetowym, ale równie dobrze może zostać użyta w innych aplikacjach typu klient lub serwer. Specyfikacja WebSocket definiuje dwa nowe URI, ws: i wss:, dla nieszyfrowanych i szyfrowanych połączeń.
+
+------------
+
+#### Cheat sheet
+
+```javascript
+//send a message to a specific client you need to do it like so:
+socket.broadcast.to(socketid).emit('message', 'for your eyes only');
 
 // sending to sender-client only
 socket.emit('message', "this is a test");
@@ -30,3 +38,4 @@ io.of('myNamespace').emit('message', 'gg');
 
 // sending to individual socketid
 socket.broadcast.to(socketid).emit('message', 'for your eyes only');
+```
