@@ -3,7 +3,7 @@
 
 <head>
 	<title>Socket.IO</title>
-	<link rel="stylesheet" href="./style.css">
+	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -79,6 +79,23 @@
 				playSound(); //time, freq, type, volume
 			});
 
+			//join room
+			$('form#join-room').submit(() => {
+				ioChat.emit('room join', $('#my-room').val());
+				$('#my-room').val('');
+				return false;
+			});
+
+			//existing rooms
+			ioChat.on('existing rooms', (rooms) => {
+				$('#existing-rooms-length').text(rooms.length);
+				$('#existing-rooms').text(rooms.join(', '));
+			});
+
+			//my rooms update
+			ioChat.on('my rooms', (rooms) => {
+				$('#my-rooms').text(rooms.join(', '));
+			});
 		});
 	</script>
 
@@ -104,10 +121,13 @@
 
 	<section>
 		<form id="join-room">
-			<input id="my-room" placeholder="Room name" autocomplete="off"> <button>Choose room</button>
+			<input id="my-room" placeholder="Room name" autocomplete="off"> <button>Join room</button>
 		</form>
 		<div>
-			Existing rooms: <span id="rooms"></span>
+			My rooms: <span id="my-rooms"></span>
+		</div>
+		<div>
+			Existing rooms(<span id="existing-rooms-length"></span>): <span id="existing-rooms"></span>
 		</div>
 	</section>
 </body>
