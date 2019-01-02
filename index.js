@@ -85,7 +85,9 @@ ioChat.on('connection', (socket) => {
 	socket.on('room join', (room) => {
 		if (room != '') {
 			socket.join(room);
-			users.find(v => v.id == id).rooms.push(room);
+			if (users.find(v => v.id == id).rooms.filter(v => v == room)) {
+				users.find(v => v.id == id).rooms.push(room);
+			}
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			// existing rooms into namespace
 			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
