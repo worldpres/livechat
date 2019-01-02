@@ -85,7 +85,7 @@ ioChat.on('connection', (socket) => {
 	socket.on('room join', (room) => {
 		if (room != '') {
 			socket.join(room);
-			if (users.find(v => v.id == id).rooms.filter(v => v == room)) {
+			if (users.find(v => v.id == id).rooms.filter(v => v == room).length == 0) {
 				users.find(v => v.id == id).rooms.push(room);
 			}
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
