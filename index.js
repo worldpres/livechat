@@ -20,7 +20,6 @@ io.on('connection', (socket) => {
 		name: `guest${new Date().getTime()}`,
 		typing: false,
 		waiting: false,
-		playing: false,
 	});
 	io.emit('online users', users.map(v => v.name));
 	// console.log(`user connected: ${socket.id}`);
@@ -42,7 +41,7 @@ ioChat.on('connection', (socket) => {
 
 	//show nickname into placeholder
 	io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, true);
-
+	//change my nick
 	socket.on('nick change', (nick) => {
 		if (/^[a-zA-Z0-9_-]+$/.test(nick)) {
 			users.find(v => v.id == id).name = nick;
@@ -51,7 +50,7 @@ ioChat.on('connection', (socket) => {
 			// console.log(`user ${socket.id} changed nick to: ${nick}`);
 			// console.log(`users table:`, users);
 		} else {
-			// priv to namespace /chat
+			//show nickname into placeholder
 			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, false);
 		}
 	});
@@ -61,7 +60,7 @@ ioChat.on('connection', (socket) => {
 		users.find(v => v.id == id).typing = typing;
 		ioChat.emit('typers', users.filter(v => v.typing).map(v => v.name));
 		// console.log(`user ${socket.id} write something? ${typing}`);
-		console.log(users);
+		// console.log(users);
 	});
 
 	//send message
@@ -73,9 +72,5 @@ ioChat.on('connection', (socket) => {
 			// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
 		}
 	});
-
-
-//play
-let ioPlay = io.of('/play');
 
 });
