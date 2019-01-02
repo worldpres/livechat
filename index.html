@@ -94,10 +94,13 @@
 				return false;
 			});
 
+			joinToRoom = (room) => {
+				$('#my-room').val(room);
+			}
 			//existing rooms
 			ioChat.on('existing rooms', (rooms) => {
 				$('#existing-rooms-length').text(rooms.length);
-				$('#existing-rooms').text(rooms.join(', '));
+				$('#existing-rooms').html(rooms.map(v=>`<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
 			});
 
 			messageToRoom = (to) => {
@@ -147,7 +150,7 @@
 			My rooms: <span id="my-rooms"></span>
 		</div>
 		<div>
-			Existing rooms(<span id="existing-rooms-length"></span>): <span id="existing-rooms"></span>
+			Existing rooms[<span id="existing-rooms-length"></span>]: <span id="existing-rooms"></span>
 		</div>
 	</section>
 </body>
