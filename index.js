@@ -20,16 +20,13 @@ io.on('connection', (socket) => {
 		name: `guest${new Date().getTime()}`,
 		typing: false,
 		waiting: false,
+		rooms: [],
 	});
 	io.emit('online users', users.map(v => v.name));
-	// console.log(`user connected: ${socket.id}`);
-	// console.log(`users table:`, users);
 
 	socket.on('disconnect', () => {
 		users = users.filter(v => v.id != socket.id);
 		io.emit('online users', users.map(v => v.name));
-		// console.log(`user disconnected:  ${socket.id}`);
-		// console.log(`users table:`, users);
 	});
 });
 
@@ -37,22 +34,19 @@ io.on('connection', (socket) => {
 let ioChat = io.of('/chat');
 
 ioChat.on('connection', (socket) => {
-	let id = socket.id.substr(socket.id.indexOf('#') + 1);
+	const id = socket.id.substr(socket.id.indexOf('#') + 1);
 
-	//show nickname into placeholder
-	io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, true);
+	//show nickname into placeholder by emit to sender-client only
+	socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
+
 	//change my nick
 	socket.on('nick change', (nick) => {
 		if (/^[a-zA-Z0-9_-]+$/.test(nick)) {
 			users.find(v => v.id == id).name = nick;
 			io.emit('online users', users.map(v => v.name));
-			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', nick, true);
-			// console.log(`user ${socket.id} changed nick to: ${nick}`);
-			// console.log(`users table:`, users);
+			socket.emit('nick changed or not', nick, true);
 		} else {
-			//show nickname into placeholder
-			// io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, false);
-			// fix: emit to sender-client only
+			//show nickname into placeholder by emit to sender-client only
 			socket.emit('nick changed or not', users.find(v => v.id == id).name, false);
 		}
 	});
@@ -61,8 +55,6 @@ ioChat.on('connection', (socket) => {
 	socket.on('im typing', (typing) => {
 		users.find(v => v.id == id).typing = typing;
 		ioChat.emit('typers', users.filter(v => v.typing).map(v => v.name));
-		// console.log(`user ${socket.id} write something? ${typing}`);
-		// console.log(users);
 	});
 
 	//send message
@@ -71,8 +63,6 @@ ioChat.on('connection', (socket) => {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
 			ioChat.emit('message sent', name, date, msg);
-			// console.log(`sent message by ${socket.id} (${name}) : ${msg}`);
 		}
 	});
-
 });

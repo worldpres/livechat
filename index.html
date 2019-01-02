@@ -22,9 +22,9 @@
 	<script>
 		$(() => {
 			//SOUND
-			playSound = (time = 25, freq = 861.6, type = 'triangle', volume = 0.4, pretty = false) => {
+			playSound = (time = 1000, freq = 300, type = 'sine', volume = 0.5, pretty = true) => { //sine triangle sawtooth square
 				let ctx = new AudioContext(); // one context per document
-				let osc = ctx.createOscillator(); // instantiate an oscillator
+				let osc = ctx.createOscillator(); // instance of oscillator
 				let vol = ctx.createGain();
 				vol.gain.value = volume; // from 0 to 1, 1 full volume, 0 is muted
 				osc.type = type; // this is the default - also square, sawtooth, triangle
@@ -84,14 +84,8 @@
 				return false;
 			});
 			ioChat.on('message sent', (name, date, msg) => {
-				//let x = $("#messages").scrollTop();
-				//let y = $("#messages")[0].scrollHeight;
-				// autoscroll: y-x <= 160
 				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
-				if ($('#autoscroll')[0].checked) {
-					$('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
-					//$('#messages').scrollTop($('#messages')[0].scrollHeight);
-				}
+				if ($('#autoscroll')[0].checked) $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
 				playSound(); //time, freq, type, volume
 			});
 
