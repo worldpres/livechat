@@ -103,9 +103,12 @@
 			messageToRoom = (to) => {
 				ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
 			}
+			leaveRoom = (room) => {
+				if(confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
+			}
 			//my rooms update
 			ioChat.on('my rooms', (rooms) => {
-				$('#my-rooms').html(rooms.map(v=>`${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="messageToRoom('${v}')">&#x274C</span>`).join(', '));
+				$('#my-rooms').html(rooms.map(v=>`${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="leaveRoom('${v}')">&#x274C</span>`).join(', '));
 			});
 
 			//message to room

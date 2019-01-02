@@ -4,8 +4,7 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext*
 
 ## TODO
-- wychodzenie z pokoju,
-- szybkie wbicie do pokoju, (leave)
+- szybkie wbicie do pokoju, 
 - liczebnosc w pokojach
 - sprawdzenie czy wyslamy do dobrego pokoju - właściwosc rooms usera
 - ostatnie 10 wiadomosci w tablicy/bazie

@@ -92,6 +92,17 @@ ioChat.on('connection', (socket) => {
 		}
 	});
 
+	//leave room
+	socket.on('leave room', (room) => {
+		if (room != '') {
+			socket.leave(room);
+			users.find(v => v.id == id).rooms = users.find(v => v.id == id).rooms.filter(v => v != room);
+			socket.emit('my rooms', users.find(v => v.id == id).rooms);
+			// existing rooms into namespace
+			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
+		}
+	});
+
 	//message to room
 	socket.on('message to room', (to, msg) => {
 		if (msg != '' && msg != null) {
