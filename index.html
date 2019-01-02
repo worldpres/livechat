@@ -3,17 +3,7 @@
 
 <head>
 	<title>Socket.IO</title>
-	<style>
-		ul{
-			list-style-type: disc;
-			height: 100px;
-			overflow-y: scroll;
-		}
-
-		form {
-			display: inline-block;
-		}
-	</style>
+	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -94,21 +84,32 @@
 
 	<nav>
 		<form id="nick-change">
-			<input id="my-nick" placeholder="Your nickname" autocomplete="off" /> <button>Change nick</button>
+			<input id="my-nick" placeholder="Your nickname" autocomplete="off"> <button>Change nick</button>
 		</form>
 	</nav>
 
-	<ul id="messages"></ul>
-	<form id="message-send">
-		<input id="message" placeholder="Your message" autocomplete="off" /> <button>Send</button>
-		<input id="autoscroll" type="checkbox" checked> Autoscroll
-	</form>
+	<main>
+		<ul id="messages"></ul>
+		<form id="message-send">
+			<input id="message" placeholder="Your message" autocomplete="off"> <button>Send</button>
+			<input id="autoscroll" type="checkbox" checked> Autoscroll
+		</form>
+	</main>
 
 	<aside id="typers"></aside>
 
 	<aside>
 		Online users: <span id="online-users"></span>
 	</aside>
+
+	<section>
+		<form id="join-room">
+			<input id="my-room" placeholder="Room name" autocomplete="off"> <button>Choose room</button>
+		</form>
+		<div>
+			Existing rooms: <span id="rooms"></span>
+		</div>
+	</section>
 </body>
 
 </html>
