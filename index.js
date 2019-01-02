@@ -49,7 +49,7 @@ ioChat.on('connection', (socket) => {
 	const id = socket.id.substr(socket.id.indexOf('#') + 1);
 
 	// existing rooms into namespace
-	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
+	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
 	socket.emit('my rooms', users.find(v => v.id == id).rooms);
 
 	//show nickname into placeholder by emit to sender-client only
@@ -91,7 +91,7 @@ ioChat.on('connection', (socket) => {
 			}
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			// existing rooms into namespace
-			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
+			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
 		}
 	});
 
@@ -102,7 +102,7 @@ ioChat.on('connection', (socket) => {
 			users.find(v => v.id == id).rooms = users.find(v => v.id == id).rooms.filter(v => v != room);
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			// existing rooms into namespace
-			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/'));
+			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
 		}
 	});
 

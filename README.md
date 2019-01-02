@@ -4,7 +4,6 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext*
 
 ## TODO
-- liczebnosc w pokojach
 - ostatnie 10 wiadomosci w tablicy/bazie
 
 ### About WebSocket
