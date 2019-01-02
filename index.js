@@ -51,7 +51,9 @@ ioChat.on('connection', (socket) => {
 			// console.log(`users table:`, users);
 		} else {
 			//show nickname into placeholder
-			io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, false);
+			// io.of('/chat').to(`/chat#${id}`).emit('nick changed or not', users.find(v => v.id == id).name, false);
+			// fix: emit to sender-client only
+			socket.emit('nick changed or not', users.find(v => v.id == id).name, false);
 		}
 	});
 
