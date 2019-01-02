@@ -1,4 +1,5 @@
-const app = require('express')();
+const express = require('express');
+const app = express(); //because of correct css path
 const http = require('http').Server(app);
 const ip = require('ip');
 const io = require('socket.io')(http);
@@ -8,8 +9,10 @@ http.listen(port, () => {
 	console.log(`listening on ${ip.address()}:${port}`);
 });
 
+app.use(express.static(__dirname + '/')); //because of correct css path
+
 app.get('/', (req, res) => {
-	res.sendFile(__dirname + `/index.html`);
+	res.sendFile(`index.html`);
 });
 
 let users = [];
