@@ -100,16 +100,17 @@
 				$('#existing-rooms').text(rooms.join(', '));
 			});
 
-			simpleMessage = (to) => {
-				ioChat.emit('simple message', to, prompt(`Your message to ${to}...`));
+			messageToRoom = (to) => {
+				ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
 			}
 			//my rooms update
 			ioChat.on('my rooms', (rooms) => {
-				$('#my-rooms').html(rooms.map(v=>`${v}<span onclick="simpleMessage('${v}')">&#x1F4DD;&#x274C</span>`).join(', '));
+				$('#my-rooms').html(rooms.map(v=>`${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="messageToRoom('${v}')">&#x274C</span>`).join(', '));
 			});
 
-			//simple message
-			ioChat.on('simple message', (name, date, msg, to) => {
+			//message to room
+			ioChat.on('message to room', (name, date, msg, to) => {
+				playSound(1000, 3000, 'sawtooth', 0.3, true);
 				alert(`From: ${name}\nRoom: ${to}\nDate: ${date}\nMessage: ${msg}`);
 			});
 		});

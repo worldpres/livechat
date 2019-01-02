@@ -92,12 +92,12 @@ ioChat.on('connection', (socket) => {
 		}
 	});
 
-	//simple message
-	socket.on('simple message', (to, msg) => {
+	//message to room
+	socket.on('message to room', (to, msg) => {
 		if (msg != '' && msg != null) {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
-			socket.broadcast.to(to).emit('simple message', name, date, msg, to);
+			socket.broadcast.to(to).emit('message to room', name, date, msg, to);
 		}
 	});
 });
