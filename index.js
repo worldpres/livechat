@@ -31,6 +31,17 @@ io.on('connection', (socket) => {
 		users = users.filter(v => v.id != socket.id);
 		io.emit('online users', users.map(v => v.name));
 	});
+
+	socket.on('priv message', (to, msg) => {
+		console.log(to);
+		console.log(msg);
+		if (msg != '' && msg != null) {
+			let toId = users.find(v => v.name == to).id;
+			let name = users.find(v => v.id == socket.id).name;
+			let date = new Date().toLocaleString('pl-PL');
+			socket.broadcast.to(toId).emit('priv message', name, date, msg);
+		}
+	});
 });
 
 //chat

@@ -37,8 +37,16 @@
 			let socket = io();
 			let ioChat = io('/chat');
 
+			privMessage = (to) => {
+				socket.emit('priv message', to, prompt(`Your message to ${to}...`));
+			}
+			//priv message
+			socket.on('priv message', (name, date, msg) => {
+				alert(`From: ${name}\nDate: ${date}\nMessage: ${msg}`);
+			});
+
 			socket.on('online users', (users) => {
-				$('#online-users').text(users.join(', '));
+				$('#online-users').html(users.map(v=>`<span onclick="privMessage('${v}')">${v}</span>`).join(', '));
 			});
 
 			//nick-change
@@ -100,7 +108,7 @@
 				$('#my-rooms').html(rooms.map(v=>`<span onclick="simpleMessage('${v}')">${v}</span>`).join(', '));
 			});
 
-			//
+			//simple message
 			ioChat.on('simple message', (name, date, msg, to) => {
 				alert(`From: ${name}\nRoom: ${to}\nDate: ${date}\nMessage: ${msg}`);
 			});

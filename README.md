@@ -12,9 +12,6 @@ WebSocket jest technologią zapewniającą dwukierunkowy kanał komunikacji za p
 #### Cheat sheet
 
 ```javascript
-//send a message to a specific client you need to do it like so:
-socket.broadcast.to(socketid).emit('message', 'for your eyes only');
-
 // sending to sender-client only
 socket.emit('message', "this is a test");
 
