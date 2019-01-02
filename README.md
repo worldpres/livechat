@@ -1,7 +1,7 @@
 # Live Chat
 
 **FRONT**: *HTML* + *CSS* + *Javascript/jQuery*
-**BACK**: *NodeJS* + *Socket.IO* + AudioContext
+**BACK**: *NodeJS* + *Socket.IO* + *AudioContext*
 
 ## TODO
 - ikony wyslania priv/simple message
