@@ -3,6 +3,13 @@
 **FRONT**: *HTML* + *CSS* + *Javascript/jQuery*
 **BACK**: *NodeJS* + *Socket.IO* + AudioContext
 
+## TODO
+- ikony wyslania priv/simple message
+- wychodzenie z pokoju,
+- szybkie wbicie do pokoju,
+- liczebnosc w pokojach
+- sprawdzenie czy wyslamy do dobrego pokoju - właściwosc rooms usera
+
 ### About WebSocket
 
 WebSocket jest technologią zapewniającą dwukierunkowy kanał komunikacji za pośrednictwem jednego gniazda TCP. Stworzono ją do komunikacji przeglądarki internetowej z serwerem internetowym, ale równie dobrze może zostać użyta w innych aplikacjach typu klient lub serwer. Specyfikacja WebSocket definiuje dwa nowe URI, ws: i wss:, dla nieszyfrowanych i szyfrowanych połączeń.
