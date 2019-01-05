@@ -13,22 +13,6 @@
 </head>
 
 <body>
-	<div id="modal" class="modal">
-		<div class="modal-content">
-			<div class="input-field">
-				<input type="text" id="modalMessage" autocomplete="off" data-length="120">
-				<label for="modalMessage"></label>
-			</div>
-		</div>
-		<div class="modal-footer">
-			<a href="#!" class="modal-close waves-effect waves-light btn-small red left">Close</a>
-			<button id="sendModalMessage" class="waves-effect waves-light btn-small green right">
-				<i class="material-icons right">send</i>
-				Send
-			</button>
-		</div>
-	</div>
-
 	<main>
 		<div class="container">
 			<div class="row">
@@ -137,6 +121,34 @@
 	<footer class="center-align">
 		Dominik Pres &copy; 2018
 	</footer>
+
+
+	<div id="modal" class="modal">
+		<div class="modal-content">
+			<div class="input-field">
+				<input type="text" id="modalMessage" autocomplete="off" data-length="120">
+				<label for="modalMessage"></label>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-small red left">Close</a>
+			<button id="sendModalMessage" class="waves-effect waves-light btn-small green right">
+				<i class="material-icons right">send</i>
+				Send
+			</button>
+		</div>
+	</div>
+
+	<div id="modal-confirm" class="modal">
+		<div class="modal-content"></div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-light btn-small grey left">Cancel</a>
+			<button id="confirmModal" class="waves-effect waves-light btn-small red right">
+				<i class="material-icons white-text right">delete_forever</i>
+				Delete
+			</button>
+		</div>
+	</div>
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/jquery-1.11.1.js"></script>

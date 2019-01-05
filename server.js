@@ -128,19 +128,18 @@ ioChat.on('connection', (socket) => {
 		}
 	});
 
-
-
-
-
-	//leave room
 	socket.on('leave room', (room) => {
-		if (room != '') {
+		if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
 			socket.leave(room);
 			users.find(v => v.id == id).rooms = users.find(v => v.id == id).rooms.filter(v => v != room);
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
 		}
 	});
+
+
+
+	
 
 	//message to room
 	socket.on('message to room', (to, msg) => {

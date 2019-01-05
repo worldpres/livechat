@@ -163,6 +163,12 @@ $(() => {
         if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
             ioChat.emit('room join', room);
             $('#my-room').val('').focus().blur();
+            M.toast({
+                html: `You joined to room ${room}`,
+                displayLength: 2000,
+                inDuration: 100,
+                outDuration: 100,
+            });
         } else {
             M.toast({
                 html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
@@ -173,11 +179,27 @@ $(() => {
         }
         return false;
     });
+
+    leaveRoom = (room) => {
+        $('#modal-confirm .modal-content').html(`Do you want to leave room <span>${room}</span>?`);
+        $('#modal-confirm').modal('open');
+    }
+    $('#modal-confirm #confirmModal').on('click', () => {
+        let room = $('#modal-confirm .modal-content span').text();
+        ioChat.emit('leave room', room);
+        $('#modal-confirm').modal('close');
+        M.toast({
+            html: `You leaved room ${room}`,
+            displayLength: 2000,
+            inDuration: 100,
+            outDuration: 100,
+        });
+    });
+
+
+
     messageToRoom = (to) => {
         ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
-    }
-    leaveRoom = (room) => {
-        if (confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
     }
     //message to room
     ioChat.on('message to room', (name, date, msg, to) => {
