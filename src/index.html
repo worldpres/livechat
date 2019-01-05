@@ -139,53 +139,112 @@
 	</script>
 
 	<main>
-
-		<form id="nick-change">
-			<div class="input-field">
-				<input type="text" id="my-nick" placeholder="Your nickname" autocomplete="off" data-length="10">
-				<label for="my-nick">Your nickname</label>
+		<div class="container">
+			<div class="row">
+				<div class="col s12">
+					<h1 class="green-text">Live<sub class="blue-text">chat</sub></h1>
+				</div>
 			</div>
-			<!-- <button>Change nick</button> -->
-			<button class="waves-effect waves-light btn blue"><i class="material-icons right">account_circle</i>Change nick</button>
-		</form>
+		</div>
 
-		<ul id="messages"></ul>
-
-		<form id="message-send">
-			<div class="input-field">
-				<input type="text" id="message" autocomplete="off" data-length="120">
-				<label for="message">Your message</label>
+		<div class="container">
+			<div class="row">
+				<!-- <div class="col s12"> -->
+				<form id="nick-change">
+					<div class="input-field col s12 m8 l6 offset-l1">
+						<input type="text" id="my-nick" placeholder="Your nickname" autocomplete="off" data-length="10">
+						<label for="my-nick">Your nickname</label>
+					</div>
+					<!-- <button>Change nick</button> -->
+					<button class="waves-effect waves-light btn blue col s12 m4 l4"><i class="material-icons right">account_circle</i>Change
+						nick</button>
+				</form>
+				<!-- </div> -->
 			</div>
-			<button class="waves-effect waves-light btn blue"><i class="material-icons right">chat</i>Send</button>
-			<label>
-				<input type="checkbox" id="autoscroll" checked="checked">
-				<span>Autoscroll</span>
-			</label>
-		</form>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col s12 m12 l10 offset-l1">
+					<ul id="messages"></ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m12 l10 offset-l1">
+					<div class="col s12 m4 right-align right">
+						<!-- <label>
+							<input type="checkbox" id="autoscroll" checked="checked">
+							<span>Autoscroll</span>
+						</label> -->
+						<div class="switch">
+							<label>
+								Off
+								<input type="checkbox" id="autoscroll" checked="checked">
+								<span class="lever"></span>
+								Autoscroll
+							</label>
+						</div>
+					</div>
+					<div class="col s12 m8">
+						<div id="typers"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<!-- <div class="col s12"> -->
+				<form id="message-send">
+					<div class="input-field col s12 m8 l6 offset-l1">
+						<input type="text" id="message" autocomplete="off" data-length="120">
+						<label for="message">Write your message</label>
+					</div>
+					<button class="waves-effect waves-light btn blue col s12 m4 l4"><i class="material-icons right">chat</i>Send</button>
+				</form>
+				<!-- </div> -->
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col s12 m12 l10 offset-l1">
+					Online users: <span id="online-users"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<!-- <div class="col s12 m4 l6"> -->
+				<form id="join-room">
+					<div class="input-field col s12 m8 l6 offset-l1">
+						<input type="text" id="my-room" autocomplete="off" data-length="10">
+						<label for="my-room">Room name</label>
+					</div>
+					<button class="waves-effect waves-light btn blue col s12 m4 l4"><i class="material-icons right">group_add</i>Join
+						room</button>
+				</form>
+				<!-- </div> -->
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col s12 l10 offset-l1">
+					My rooms: <span id="my-rooms"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 l10 offset-l1">
+					Existing rooms[<span id="existing-rooms-length"></span>]: <span id="existing-rooms"></span>
+				</div>
+			</div>
+		</div>
 
 	</main>
 
-	<aside id="typers"></aside>
-
-	<aside>
-		Online users: <span id="online-users"></span>
-	</aside>
-
-	<section>
-		<form id="join-room">
-			<div class="input-field">
-				<input type="text" id="my-room" autocomplete="off" data-length="10">
-				<label for="my-room">Room name</label>
-			</div>
-			<button class="waves-effect waves-light btn blue"><i class="material-icons right">group_add</i>Join room</button>
-		</form>
-		<div>
-			My rooms: <span id="my-rooms"></span>
-		</div>
-		<div>
-			Existing rooms[<span id="existing-rooms-length"></span>]: <span id="existing-rooms"></span>
-		</div>
-	</section>
+	<footer></footer>
 </body>
 
 </html>

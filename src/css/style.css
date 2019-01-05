@@ -1,44 +1,125 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('../img/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+main {
+    position: relative;
+}
+
+main::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -10;
+}
+
+footer {
+    position: relative;
+    min-height: 50px; 
+    margin-top: -20px;
+}
+
+footer::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -10;
+}
+
 ul {
     height: 150px;
     overflow-y: scroll;
 }
 
-form {
-    display: inline-block;
+#typers{
+    font-style: italic;
+    color: gray;
+    font-size: 13px;
+}
+
+/* scrollbar */
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: #eee;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--materialize-form-color);
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #4CAF50;
 }
 
 /* Materialize form colors */
 :root {
     --materialize-form-color: #2196F3;
 }
+
 /* checkbox color */
-[type="checkbox"]:checked + span:not(.lever):before{
+[type="checkbox"]:checked+span:not(.lever):before {
     border-right: 2px solid var(--materialize-form-color) !important;
     border-bottom: 2px solid var(--materialize-form-color) !important;
 }
+.switch label input[type=checkbox]:checked + .lever{
+    background-color: rgb(119, 187, 243);
+}
+.switch label input[type=checkbox]:checked + .lever:after{
+    background-color: #2196F3;
+}
+
 /* label color */
 .input-field label {
     color: #000;
 }
+
 /* label focus color */
 .input-field input[type=text]:focus+label {
     color: var(--materialize-form-color) !important;
 }
+
 /* label underline focus color */
 .input-field input[type=text]:focus {
     border-bottom: 1px solid var(--materialize-form-color) !important;
     box-shadow: 0 1px 0 0 var(--materialize-form-color) !important;
 }
+
 /* valid color */
 .input-field input[type=text].valid {
     border-bottom: 1px solid var(--materialize-form-color) !important;
     box-shadow: 0 1px 0 0 var(--materialize-form-color) !important;
 }
+
 /* invalid color */
 .input-field input[type=text].invalid {
     border-bottom: 1px solid var(--materialize-form-color) !important;
     box-shadow: 0 1px 0 0 var(--materialize-form-color) !important;
 }
+
 /* icon prefix focus color */
 .input-field .prefix.active {
     color: var(--materialize-form-color) !important;
