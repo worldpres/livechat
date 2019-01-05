@@ -57,7 +57,10 @@
 
 			//previous messages
 			ioChat.on('previous messages', (messages) => {
-				if(messages.length) $('#messages').html(messages.map(v=>`<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+				if(messages.length){
+					$('#messages').html(messages.map(v=>`<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+					$('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+				}
 			});
 
 			//nick-change
@@ -136,16 +139,20 @@
 
 	<main>
 		<form id="nick-change">
-			<input id="my-nick" placeholder="Your nickname" autocomplete="off"> <button>Change nick</button>
+			<div class="input-field">
+				<input type="text" id="my-nick" placeholder="Your nickname" autocomplete="off" data-length="10">
+				<label for="my-nick">Your nickname</label>
+			</div>
+			<button>Change nick</button>
 		</form>
 		<ul id="messages"></ul>
 		<form id="message-send">
 			<input id="message" placeholder="Your message" autocomplete="off"> <button>Send</button>
 			<!-- <input id="autoscroll" type="checkbox" checked>  -->
 			<label>
-					<input type="checkbox" id="autoscroll" checked="checked">
-					<span>Autoscroll</span>
-				  </label>
+				<input type="checkbox" id="autoscroll" checked="checked">
+				<span>Autoscroll</span>
+			</label>
 		</form>
 	</main>
 
