@@ -15,6 +15,32 @@ app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
 });
 
+/*
+const express = require('express');
+const app = express();
+
+app.listen(3000, function() {
+  console.log('ok')
+})
+
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb://test123:test123@ds115094.mlab.com:15094/mongotest';
+
+app.get('/', (req, res) => {
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db('mongotest');
+    var query = { };
+    dbo.collection('kolekcja').find(query).toArray(function(err, result) {
+      if (err) throw err;
+      db.close();
+      console.log('API: all documents readed');
+      res.send(result);
+    });
+  });
+});
+*/
+
 let users = [];
 
 io.on('connection', (socket) => {
