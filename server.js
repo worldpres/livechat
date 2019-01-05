@@ -15,31 +15,26 @@ app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
 });
 
-/*
-const express = require('express');
-const app = express();
-
-app.listen(3000, function() {
-  console.log('ok')
-})
 
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://test123:test123@ds115094.mlab.com:15094/mongotest';
+const url = 'mongodb://livechat10:livechat10@ds149754.mlab.com:49754/livechat';
 
-app.get('/', (req, res) => {
-  MongoClient.connect(url, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db('mongotest');
-    var query = { };
-    dbo.collection('kolekcja').find(query).toArray(function(err, result) {
-      if (err) throw err;
-      db.close();
-      console.log('API: all documents readed');
-      res.send(result);
-    });
-  });
+app.get('/mongou', (req, res) => {
+	MongoClient.connect(url, {
+		useNewUrlParser: true,
+	}, function (err, db) {
+		if (err) throw err;
+		var dbo = db.db('livechat');
+		var query = {};
+		dbo.collection('messages').find(query).toArray(function (err, result) {
+			if (err) throw err;
+			db.close();
+			console.log('API: all documents readed');
+			res.send(result);
+		});
+	});
 });
-*/
+
 
 let users = [];
 

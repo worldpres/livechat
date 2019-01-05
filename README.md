@@ -1,7 +1,8 @@
 # Live Chat
 
 **FRONT**: *HTML* + *CSS* + *Javascript/jQuery*
-**BACK**: *NodeJS* + *Socket.IO* + *AudioContext*
+
+**BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
 - previous messages saved in mongodb.
