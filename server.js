@@ -112,24 +112,13 @@ ioChat.on('connection', (socket) => {
 				};
 			});
 			ioChat.emit('message sent', name, date, msg);
-		}else{
+		} else {
 			ioChat.emit('message sent', '', '', '', false);
 		}
 	});
 
-
-
-
-
-
-
-
-
-
-
-	//room join
 	socket.on('room join', (room) => {
-		if (room != '') {
+		if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
 			socket.join(room);
 			if (users.find(v => v.id == id).rooms.filter(v => v == room).length == 0) {
 				users.find(v => v.id == id).rooms.push(room);
@@ -138,6 +127,10 @@ ioChat.on('connection', (socket) => {
 			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
 		}
 	});
+
+
+
+
 
 	//leave room
 	socket.on('leave room', (room) => {

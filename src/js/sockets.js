@@ -54,6 +54,10 @@ $(() => {
         $('#existing-rooms').html(rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
     });
 
+    joinToRoom = (room) => {
+        $('#my-room').val(room.split('(')[0]).focus();
+    }
+
     ioChat.on('my rooms', (rooms) => {
         $('#my-rooms').html(rooms.map(v => `${v}<span onclick="messageToRoom('${v}')"><i class="material-icons green-text">chat</i></span> <span onclick="leaveRoom('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
     });
@@ -153,27 +157,20 @@ $(() => {
         }
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //join room
-    joinToRoom = (room) => {
-        $('#my-room').val(room.split('(')[0]).focus();
-    }
-
-    $('form#join-room').submit(() => {
-        ioChat.emit('room join', $('#my-room').val());
-        $('#my-room').val('').focus().blur();
+    $('#join-room').submit((e) => {
+        e.preventDefault();
+        let room = $('#my-room').val();
+        if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
+            ioChat.emit('room join', room);
+            $('#my-room').val('').focus().blur();
+        } else {
+            M.toast({
+                html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
+                displayLength: 2000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+        }
         return false;
     });
     messageToRoom = (to) => {
