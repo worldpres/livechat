@@ -83,7 +83,7 @@ ul {
 /* scrollbar */
 /* width */
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 14px;
 }
 
 /* Track */

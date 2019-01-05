@@ -61,7 +61,7 @@ $(() => {
     ioChat.on('nick changed or not', (nick, changed) => {
         if (!changed) {
             M.toast({
-                html: 'Incorrect nickname',
+                html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
                 outDuration: 100,
@@ -77,6 +77,22 @@ $(() => {
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
         }
+    });
+
+    $('#nick-change').submit((e) => {
+        e.preventDefault();
+        let nick = $('#my-nick').val();
+        if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(nick)) {
+            ioChat.emit('nick change', nick);
+        }else{
+            M.toast({
+                html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
+                displayLength: 2000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+        }
+        return false;
     });
 
 
@@ -135,12 +151,8 @@ $(() => {
 
 
 
-    //nick-change
-    $('form#nick-change').submit((e) => {
-        e.preventDefault();
-        ioChat.emit('nick change', $('#my-nick').val());
-        return false;
-    });
+
+
 
 
     //who is typing
