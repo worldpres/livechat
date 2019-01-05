@@ -42,10 +42,10 @@ io.on('connection', (socket) => {
 				socket.broadcast.to(toId).emit('priv message', name, date, msg, to);
 				socket.emit('priv message', name, date, msg, to);
 			} else {
-				socket.emit('priv message', '', '', '', 'yourself');
+				socket.emit('priv message', '', '', '', '', 'yourself');
 			}
 		} else {
-			socket.emit('priv message', '', '', '', 'regex');
+			socket.emit('priv message', '', '', '', '', 'regex');
 		}
 	});
 });
@@ -137,13 +137,8 @@ ioChat.on('connection', (socket) => {
 		}
 	});
 
-
-
-	
-
-	//message to room
 	socket.on('message to room', (to, msg) => {
-		if (msg != '' && msg != null && users.find(v => v.id == id).rooms.filter(v => v == to).length == 1) {
+		if (/^[^[\]<>]{1,120}$/i.test(msg) && users.find(v => v.id == id).rooms.filter(v => v == to).length == 1) {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
 			socket.broadcast.to(to).emit('message to room', name, date, msg, to);

@@ -5,10 +5,6 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
-- style with materializecss;
-- walidacja po obu stronach długosci tekstu w inputach (znaczniki html);
-- priv/simple message w oknie glownym.
-- walidacja wiadomosci;
 
 
 ### About WebSocket
