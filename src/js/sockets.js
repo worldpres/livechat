@@ -210,6 +210,7 @@ $(() => {
             }
         });
         $('#modal').modal('open');
+        $('#modal #modalMessage').focus();
     }
     $('#modal #sendModalMessageRoom').on('click', () => {
         let msg = $('#modal #modalMessage').val();
