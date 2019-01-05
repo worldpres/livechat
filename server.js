@@ -85,19 +85,16 @@ ioChat.on('connection', (socket) => {
 		}
 	});
 
-
-
-
-
-
-
-
-
-	//who is typing
 	socket.on('im typing', (typing) => {
 		users.find(v => v.id == id).typing = typing;
-		ioChat.emit('typers', users.filter(v => v.typing).map(v => v.name));
+		ioChat.emit('who is typing', users.filter(v => v.typing).map(v => v.name));
 	});
+
+
+
+
+
+
 
 	//send message
 	socket.on('message send', (msg) => {

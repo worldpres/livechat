@@ -84,7 +84,7 @@ $(() => {
         let nick = $('#my-nick').val();
         if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(nick)) {
             ioChat.emit('nick change', nick);
-        }else{
+        } else {
             M.toast({
                 html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
@@ -95,7 +95,16 @@ $(() => {
         return false;
     });
 
-
+    $('#message').keyup(() => {
+        ioChat.emit('im typing', true);
+    });
+    $('#message').blur(() => {
+        ioChat.emit('im typing', false);
+    });
+    ioChat.on('who is typing', (typers) => {
+        if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
+        else $('#typers').text(``);
+    });
 
 
 
@@ -155,17 +164,7 @@ $(() => {
 
 
 
-    //who is typing
-    $('#message').keyup(() => {
-        ioChat.emit('im typing', true);
-    });
-    $('#message').blur(() => {
-        ioChat.emit('im typing', false);
-    });
-    ioChat.on('typers', (typers) => {
-        if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
-        else $('#typers').text(``);
-    });
+
 
     //message send
     $('form#message-send').submit(() => {
