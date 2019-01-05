@@ -90,15 +90,8 @@ ioChat.on('connection', (socket) => {
 		ioChat.emit('who is typing', users.filter(v => v.typing).map(v => v.name));
 	});
 
-
-
-
-
-
-
-	//send message
 	socket.on('message send', (msg) => {
-		if (msg != '') {
+		if (/^[^[\]<>]{1,120}$/i.test(msg)) {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
 			MongoClient.connect(url, {
@@ -119,8 +112,20 @@ ioChat.on('connection', (socket) => {
 				};
 			});
 			ioChat.emit('message sent', name, date, msg);
+		}else{
+			ioChat.emit('message sent', '', '', '', false);
 		}
 	});
+
+
+
+
+
+
+
+
+
+
 
 	//room join
 	socket.on('room join', (room) => {

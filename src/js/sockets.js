@@ -3,7 +3,7 @@ $(() => {
     let ioChat = io('/chat');
 
     socket.on('online users', (users) => {
-        $('#online-users').html(users.map(v => `${v}<i class="material-icons red-text" onclick="openModal('${v}')">chat</i>`).join(', '));
+        $('#online-users').html(users.map(v => `${v}<i class="material-icons orange-text" onclick="openModal('${v}')">chat</i>`).join(', '));
     });
 
     openModal = (to) => {
@@ -33,7 +33,7 @@ $(() => {
 
     socket.on('priv message', (name, date, msg, from, feedback = false) => {
         if (!feedback) {
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons red-text">mail</i>${name} <i class="tiny material-icons red-text">trending_flat</i> ${from} (${date}) : ${msg}`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i>${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} (${date}) : ${msg}`));
             if ($('#autoscroll')[0].checked) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -106,6 +106,56 @@ $(() => {
         else $('#typers').text(``);
     });
 
+    $('#message-send').submit((e) => {
+        e.preventDefault();
+        let msg = $('#message').val();
+        if (/^[^[\]<>]{1,120}$/i.test(msg)) {
+            ioChat.emit('message send', msg);
+            $('#message').val('');
+        } else {
+            M.toast({
+                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                displayLength: 4000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+            $('#message').focus();
+        }
+        $('#message-send button').attr('disabled', 'disabled');
+        setTimeout(() => {
+            $('#message-send button').removeAttr('disabled');
+        }, 2000);
+        return false;
+    });
+
+    ioChat.on('message sent', (name, date, msg, feedback = true) => {
+        if (feedback) {
+            $('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
+            if ($('#autoscroll')[0].checked) $('#messages').animate({
+                scrollTop: $('#messages')[0].scrollHeight
+            }, 600);
+            $('#message').blur().focus();
+            M.toast({
+                html: 'New message',
+                displayLength: 1000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+            playSound(); //time, freq, type, volume
+        } else {
+            M.toast({
+                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                displayLength: 4000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+            $('#message').focus();
+        }
+    });
+
+
+
+
 
 
 
@@ -141,54 +191,4 @@ $(() => {
         $('#modal p').text(`Message: ${msg}`);
         M.Modal.getInstance($('#modal')).open();
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //message send
-    $('form#message-send').submit(() => {
-        ioChat.emit('message send', $('#message').val());
-        $('#message').val('');
-        $('form#message-send button').attr('disabled', 'disabled');
-        setTimeout(() => {
-            $('form#message-send button').removeAttr('disabled');
-        }, 2000);
-        return false;
-    });
-    ioChat.on('message sent', (name, date, msg) => {
-        $('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
-        if ($('#autoscroll')[0].checked) $('#messages').animate({
-            scrollTop: $('#messages')[0].scrollHeight
-        }, 600);
-        $('#message').blur().focus();
-        M.toast({
-            html: 'New message',
-            displayLength: 1000,
-            inDuration: 100,
-            outDuration: 100,
-        });
-        playSound(); //time, freq, type, volume
-    });
-
 });
