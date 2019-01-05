@@ -3,26 +3,25 @@ $(() => {
     let ioChat = io('/chat');
 
     socket.on('online users', (users) => {
-        $('#online-users').html(users.map(v => `${v}<i class="material-icons orange-text" onclick="promptModal('${v}')">chat</i>`).join(', '));
+        $('#online-users').html(users.map(v => `${v}<i class="material-icons orange-text" onclick="modalPrivMessage('${v}')">chat</i>`).join(', '));
     });
 
-    promptModal = (to) => {
-        $('#modal label').html(`Write Your private message to <span>${to}</span>`);
-        $('#modal #sendModalMessagePriv').show();
-        $('#modal #sendModalMessageRoom').hide();
-        $('#modal').modal({
+    modalPrivMessage = (to) => {
+        $('#modal-message-priv label').html(`Write Your private message to <span>${to}</span>`);
+        $('#modal-message-priv').modal({
             onCloseStart: (modal, trigger) => {
-                $('#modal #modalMessage').val('').focus().blur();
+                $('#modal-message-priv #modalMessage').val('').focus().blur();
             }
         });
-        $('#modal').modal('open');
-        $('#modal #modalMessage').focus();
+        $('#modal-message-priv').modal('open');
+        $('#modal-message-priv #modalMessage').focus();
     }
 
-    $('#modal #sendModalMessagePriv').on('click', () => {
-        let msg = $('#modal #modalMessage').val();
+    $('#modal-message-priv').on('submit', (e) => {
+        e.preventDefault();
+        let msg = $('#modal-message-priv #modalMessage').val();
         if (/^[^[\]<>]{1,120}$/i.test(msg)) {
-            socket.emit('priv message', $('#modal label span').text(), msg);
+            socket.emit('priv message', $('#modal-message-priv label span').text(), msg);
         } else {
             M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
@@ -31,7 +30,7 @@ $(() => {
                 outDuration: 100,
             });
         }
-        $('#modal').modal('close');
+        $('#modal-message-priv').modal('close');
     })
 
     socket.on('priv message', (name, date, msg, from, feedback = false) => {
@@ -201,21 +200,20 @@ $(() => {
     });
 
     messageToRoom = (to) => {
-        $('#modal label').html(`Write Your message to room <span>${to}</span>`);
-        $('#modal #sendModalMessagePriv').hide();
-        $('#modal #sendModalMessageRoom').show();
-        $('#modal').modal({
+        $('#modal-message-room label').html(`Write Your message to room <span>${to}</span>`);
+        $('#modal-message-room').modal({
             onCloseStart: (modal, trigger) => {
                 $('#modal #modalMessage').val('').focus().blur();
             }
         });
-        $('#modal').modal('open');
-        $('#modal #modalMessage').focus();
+        $('#modal-message-room').modal('open');
+        $('#modal-message-room #modalMessage').focus();
     }
-    $('#modal #sendModalMessageRoom').on('click', () => {
-        let msg = $('#modal #modalMessage').val();
+    $('#modal-message-room').on('submit', (e) => {
+        e.preventDefault();
+        let msg = $('#modal-message-room #modalMessage').val();
         if (/^[^[\]<>]{1,120}$/i.test(msg)) {
-            ioChat.emit('message to room', $('#modal label span').text(), msg);
+            ioChat.emit('message to room', $('#modal-message-room label span').text(), msg);
         } else {
             M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
@@ -224,7 +222,7 @@ $(() => {
                 outDuration: 100,
             });
         }
-        $('#modal').modal('close');
+        $('#modal-message-room').modal('close');
     })
 
     ioChat.on('message to room', (name, date, msg, to) => {

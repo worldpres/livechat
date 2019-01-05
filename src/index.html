@@ -123,24 +123,40 @@
 	</footer>
 
 
-	<div id="modal" class="modal">
-		<div class="modal-content">
-			<div class="input-field">
-				<input type="text" id="modalMessage" autocomplete="off" data-length="120">
-				<label for="modalMessage"></label>
+	<div id="modal-message-priv" class="modal">
+		<form>
+			<div class="modal-content">
+				<div class="input-field">
+					<input type="text" id="modalMessage" autocomplete="off" data-length="120">
+					<label for="modalMessage"></label>
+				</div>
 			</div>
-		</div>
-		<div class="modal-footer">
-			<a href="#!" class="modal-close waves-effect waves-light btn-small red left">Close</a>
-			<button id="sendModalMessagePriv" class="waves-effect waves-light btn-small green right">
-				<i class="material-icons right">send</i>
-				Send
-			</button>
-			<button id="sendModalMessageRoom" class="waves-effect waves-light btn-small green right">
-				<i class="material-icons right">send</i>
-				Send
-			</button>
-		</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-small red left">Close</a>
+				<button class="waves-effect waves-light btn-small green right">
+					<i class="material-icons right">send</i>
+					Send
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div id="modal-message-room" class="modal">
+		<form>
+			<div class="modal-content">
+				<div class="input-field">
+					<input type="text" id="modalMessage" autocomplete="off" data-length="120">
+					<label for="modalMessage"></label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-small red left">Close</a>
+				<button class="waves-effect waves-light btn-small green right">
+					<i class="material-icons right">send</i>
+					Send
+				</button>
+			</div>
+		</form>
 	</div>
 
 	<div id="modal-confirm" class="modal">
