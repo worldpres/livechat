@@ -5,7 +5,9 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
-- style with materializecss
+- style with materializecss;
+- walidacja długosci tekstu w inputach (znaczniki html);
+- priv/simple message w oknie glownym.
 
 ### About WebSocket
 

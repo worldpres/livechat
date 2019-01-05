@@ -18,6 +18,9 @@
 	<script src="js/materialize.js"></script>
 	<script>
 		$(() => {
+
+			$('#my-nick, #message, #my-room').characterCounter();
+
 			//SOUND
 			playSound = (time = 1000, freq = 300, type = 'sine', volume = 0.5, pretty = true) => { //sine triangle sawtooth square
 				let ctx = new AudioContext(); // one context per document
@@ -73,6 +76,7 @@
 			ioChat.on('nick changed or not', (nick, changed) => {
 				if (!changed) alert(`Incorrect nickname`);
 				$('#my-nick').attr('placeholder', nick).val('');
+				$('#my-nick').focus().blur();
 			});
 
 			//who is typing
@@ -100,6 +104,7 @@
 			ioChat.on('message sent', (name, date, msg) => {
 				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
 				if ($('#autoscroll')[0].checked) $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+				$('#message').blur().focus();
 				playSound(); //time, freq, type, volume
 			});
 
@@ -244,7 +249,9 @@
 
 	</main>
 
-	<footer></footer>
+	<footer class="center-align">
+		Dominik Pres &copy; 2018
+	</footer>
 </body>
 
 </html>
