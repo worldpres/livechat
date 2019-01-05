@@ -6,8 +6,10 @@
 
 ## TODO
 - style with materializecss;
-- walidacja długosci tekstu w inputach (znaczniki html);
+- walidacja po obu stronach długosci tekstu w inputach (znaczniki html);
 - priv/simple message w oknie glownym.
+- walidacja wiadomosci;
+
 
 ### About WebSocket
 

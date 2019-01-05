@@ -74,9 +74,15 @@
 				return false;
 			});
 			ioChat.on('nick changed or not', (nick, changed) => {
-				if (!changed) M.toast({html: 'Incorrect nickname'});
-				$('#my-nick').attr('placeholder', nick).val('');
-				$('#my-nick').focus().blur();
+				if (!changed){
+					M.toast({
+						html: 'Incorrect nickname',
+						displayLength: 2000,
+						inDuration: 100,
+						outDuration: 100,
+					});
+				}
+				$('#my-nick').attr('placeholder', nick).val('').focus().blur();
 			});
 
 			//who is typing
@@ -105,13 +111,19 @@
 				$('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
 				if ($('#autoscroll')[0].checked) $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
 				$('#message').blur().focus();
+				M.toast({
+					html: 'New message',
+					displayLength: 1000,
+					inDuration: 100,
+					outDuration: 100,
+				});
 				playSound(); //time, freq, type, volume
 			});
 
 			//join room
 			$('form#join-room').submit(() => {
 				ioChat.emit('room join', $('#my-room').val());
-				$('#my-room').val('').focus().blur();;
+				$('#my-room').val('').focus().blur();
 				return false;
 			});
 
@@ -138,10 +150,29 @@
 			//message to room
 			ioChat.on('message to room', (name, date, msg, to) => {
 				playSound(1000, 3000, 'sawtooth', 0.3, true);
-				alert(`From: ${name}\nRoom: ${to}\nDate: ${date}\nMessage: ${msg}`);
+				$('#modal h4').text(`New message`);
+				$('#modal h5').text(`From ${name} (room: ${to})`);
+				$('#modal h6').text(`Date: ${date}`);
+				$('#modal p').text(`Message: ${msg}`);
+				M.Modal.getInstance($('#modal')).open();
 			});
+
+			$('.modal').modal();
+
 		});
 	</script>
+
+	<div id="modal" class="modal">
+		<div class="modal-content">
+			<h4></h4>
+			<h5></h5>
+			<h6></h6>
+			<p></p>
+		</div>
+		<div class="modal-footer">
+			<a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+		</div>
+	</div>
 
 	<main>
 		<div class="container">
