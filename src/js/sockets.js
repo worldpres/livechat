@@ -57,7 +57,7 @@ $(() => {
     ioChat.on('my rooms', (rooms) => {
         $('#my-rooms').html(rooms.map(v => `${v}<span onclick="messageToRoom('${v}')"><i class="material-icons green-text">chat</i></span> <span onclick="leaveRoom('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
     });
-    
+
     ioChat.on('nick changed or not', (nick, changed) => {
         if (!changed) {
             M.toast({
@@ -69,6 +69,17 @@ $(() => {
         }
         $('#my-nick').attr('placeholder', nick).val('').focus().blur();
     });
+
+    ioChat.on('previous messages', (messages) => {
+        if (messages.length) {
+            $('#messages').html(messages.map(v => `<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+            $('#messages').animate({
+                scrollTop: $('#messages')[0].scrollHeight
+            }, 600);
+        }
+    });
+
+
 
 
 
@@ -84,7 +95,7 @@ $(() => {
     joinToRoom = (room) => {
         $('#my-room').val(room.split('(')[0]).focus();
     }
-    
+
     $('form#join-room').submit(() => {
         ioChat.emit('room join', $('#my-room').val());
         $('#my-room').val('').focus().blur();
@@ -112,7 +123,6 @@ $(() => {
 
 
 
-    
 
 
 
@@ -122,15 +132,8 @@ $(() => {
 
 
 
-    //previous messages
-    ioChat.on('previous messages', (messages) => {
-        if (messages.length) {
-            $('#messages').html(messages.map(v => `<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
-            $('#messages').animate({
-                scrollTop: $('#messages')[0].scrollHeight
-            }, 600);
-        }
-    });
+
+
 
     //nick-change
     $('form#nick-change').submit((e) => {
@@ -138,7 +141,7 @@ $(() => {
         ioChat.emit('nick change', $('#my-nick').val());
         return false;
     });
-    
+
 
     //who is typing
     $('#message').keyup(() => {

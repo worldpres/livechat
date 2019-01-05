@@ -62,13 +62,6 @@ ioChat.on('connection', (socket) => {
 
 	socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
 
-
-
-
-
-
-	
-	//show previous messages
 	MongoClient.connect(url, {
 		useNewUrlParser: true,
 	}, (err, db) => {
@@ -81,6 +74,21 @@ ioChat.on('connection', (socket) => {
 			socket.emit('previous messages', result);
 		});
 	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 
 	//change my nick
 	socket.on('nick change', (nick) => {
