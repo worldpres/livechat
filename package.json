@@ -1,13 +1,13 @@
 {
-  "name": "socketio",
+  "name": "live-chat",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "live-chat based on: HTML, CSS, Javascript/jQuery, NodeJS, Socket.IO, AudioContext",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Dominik Pres",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",

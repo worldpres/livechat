@@ -9,7 +9,7 @@ http.listen(port, () => {
 	console.log(`listening on ${ip.address()}:${port}`);
 });
 
-app.use(express.static(__dirname + '/')); //because of correct css path
+app.use(express.static(__dirname + '/src')); //because of correct css path
 
 app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
