@@ -4,15 +4,17 @@
 <head>
 	<title>live chat</title>
 	<meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="icon" href="img/favicon.png">
+	<link rel="stylesheet" href="css/materialize.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="js/jquery-1.11.1.js"></script>
+	<script src="js/materialize.js"></script>
 	<script>
 		$(() => {
 			//SOUND
@@ -59,7 +61,8 @@
 			});
 
 			//nick-change
-			$('nav form#nick-change').submit(() => {
+			$('form#nick-change').submit((e) => {
+				e.preventDefault();
 				ioChat.emit('nick change', $('#my-nick').val());
 				return false;
 			});
@@ -131,17 +134,18 @@
 		});
 	</script>
 
-	<nav>
+	<main>
 		<form id="nick-change">
 			<input id="my-nick" placeholder="Your nickname" autocomplete="off"> <button>Change nick</button>
 		</form>
-	</nav>
-
-	<main>
 		<ul id="messages"></ul>
 		<form id="message-send">
 			<input id="message" placeholder="Your message" autocomplete="off"> <button>Send</button>
-			<input id="autoscroll" type="checkbox" checked> Autoscroll
+			<!-- <input id="autoscroll" type="checkbox" checked>  -->
+			<label>
+					<input type="checkbox" id="autoscroll" checked="checked">
+					<span>Autoscroll</span>
+				  </label>
 		</form>
 	</main>
 
