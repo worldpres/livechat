@@ -63,6 +63,10 @@ ul {
     overflow-y: scroll;
 }
 
+#online-users i{
+    cursor: pointer;
+}
+
 #typers {
     font-style: italic;
     color: gray;

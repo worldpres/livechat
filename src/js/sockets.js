@@ -3,17 +3,29 @@ $(() => {
     let ioChat = io('/chat');
 
     socket.on('online users', (users) => {
-        $('#online-users').html(users.map(v=>`${v}<i class="material-icons" onclick="privMessage('${v}')">chat</i>`).join(', '));
+        $('#online-users').html(users.map(v => `${v}<i class="material-icons" onclick="openModal('${v}')">chat</i>`).join(', '));
     });
 
-
-
-
-
-
-    privMessage = (to) => {
-        socket.emit('priv message', to, prompt(`Your message to ${to}...`));
+    openModal = (to) => {
+        $('#modal label').html(`Write Your private message to <span>${to}</span>`);
+        $('#modal').modal({
+            onCloseStart: (modal, trigger) => {
+                $('#modal #modalMessage').val('').focus().blur();
+            }
+        });
+        $('#modal').modal('open');
     }
+
+    $('#modal #sendModalMessage').on('click', () => {
+        socket.emit('priv message', $('#modal label span').text(), $('#modal #modalMessage').val());
+        $('#modal').modal('close');
+    })
+
+
+
+
+
+
     //priv message
     socket.on('priv message', (name, date, msg) => {
         alert(`From: ${name}\nDate: ${date}\nMessage: ${msg}`);
@@ -22,9 +34,11 @@ $(() => {
 
     //previous messages
     ioChat.on('previous messages', (messages) => {
-        if(messages.length){
-            $('#messages').html(messages.map(v=>`<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
-            $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+        if (messages.length) {
+            $('#messages').html(messages.map(v => `<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+            $('#messages').animate({
+                scrollTop: $('#messages')[0].scrollHeight
+            }, 600);
         }
     });
 
@@ -35,7 +49,7 @@ $(() => {
         return false;
     });
     ioChat.on('nick changed or not', (nick, changed) => {
-        if (!changed){
+        if (!changed) {
             M.toast({
                 html: 'Incorrect nickname',
                 displayLength: 2000,
@@ -70,7 +84,9 @@ $(() => {
     });
     ioChat.on('message sent', (name, date, msg) => {
         $('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
-        if ($('#autoscroll')[0].checked) $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+        if ($('#autoscroll')[0].checked) $('#messages').animate({
+            scrollTop: $('#messages')[0].scrollHeight
+        }, 600);
         $('#message').blur().focus();
         M.toast({
             html: 'New message',
@@ -94,18 +110,18 @@ $(() => {
     //existing rooms
     ioChat.on('existing rooms', (rooms) => {
         $('#existing-rooms-length').text(rooms.length);
-        $('#existing-rooms').html(rooms.map(v=>`<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
+        $('#existing-rooms').html(rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
     });
 
     messageToRoom = (to) => {
         ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
     }
     leaveRoom = (room) => {
-        if(confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
+        if (confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
     }
     //my rooms update
     ioChat.on('my rooms', (rooms) => {
-        $('#my-rooms').html(rooms.map(v=>`${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="leaveRoom('${v}')">&#x274C</span>`).join(', '));
+        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="leaveRoom('${v}')">&#x274C</span>`).join(', '));
     });
 
     //message to room
