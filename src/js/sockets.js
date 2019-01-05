@@ -72,7 +72,7 @@ $(() => {
 
     ioChat.on('previous messages', (messages) => {
         if (messages.length) {
-            $('#messages').html(messages.map(v => `<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+            $('#messages').html(messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
             $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -130,7 +130,7 @@ $(() => {
 
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
         if (feedback) {
-            $('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i>${name} (${date}) : ${msg}`));
             if ($('#autoscroll')[0].checked) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
