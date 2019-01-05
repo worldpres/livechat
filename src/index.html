@@ -139,6 +139,7 @@
 	</script>
 
 	<main>
+
 		<form id="nick-change">
 			<div class="input-field">
 				<input type="text" id="my-nick" placeholder="Your nickname" autocomplete="off" data-length="10">
@@ -147,15 +148,21 @@
 			<!-- <button>Change nick</button> -->
 			<button class="waves-effect waves-light btn blue"><i class="material-icons right">account_circle</i>Change nick</button>
 		</form>
+
 		<ul id="messages"></ul>
+
 		<form id="message-send">
-			<input id="message" placeholder="Your message" autocomplete="off"> <button>Send</button>
-			<!-- <input id="autoscroll" type="checkbox" checked>  -->
+			<div class="input-field">
+				<input type="text" id="message" autocomplete="off" data-length="120">
+				<label for="message">Your message</label>
+			</div>
+			<button class="waves-effect waves-light btn blue"><i class="material-icons right">chat</i>Send</button>
 			<label>
 				<input type="checkbox" id="autoscroll" checked="checked">
 				<span>Autoscroll</span>
 			</label>
 		</form>
+
 	</main>
 
 	<aside id="typers"></aside>
@@ -166,7 +173,11 @@
 
 	<section>
 		<form id="join-room">
-			<input id="my-room" placeholder="Room name" autocomplete="off"> <button>Join room</button>
+			<div class="input-field">
+				<input type="text" id="my-room" autocomplete="off" data-length="10">
+				<label for="my-room">Room name</label>
+			</div>
+			<button class="waves-effect waves-light btn blue"><i class="material-icons right">group_add</i>Join room</button>
 		</form>
 		<div>
 			My rooms: <span id="my-rooms"></span>
