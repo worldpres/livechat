@@ -5,7 +5,7 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
-- previous messages saved in mongodb.
+- style with materializecss
 
 ### About WebSocket
 
