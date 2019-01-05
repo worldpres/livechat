@@ -128,7 +128,7 @@
 			});
 
 			joinToRoom = (room) => {
-				$('#my-room').val(room.split('(')[0]);
+				$('#my-room').val(room.split('(')[0]).focus();
 			}
 			//existing rooms
 			ioChat.on('existing rooms', (rooms) => {
