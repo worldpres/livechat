@@ -3,7 +3,7 @@ $(() => {
     let ioChat = io('/chat');
 
     socket.on('online users', (users) => {
-        $('#online-users').html(users.map(v => `${v}<i class="material-icons" onclick="openModal('${v}')">chat</i>`).join(', '));
+        $('#online-users').html(users.map(v => `${v}<i class="material-icons red-text" onclick="openModal('${v}')">chat</i>`).join(', '));
     });
 
     openModal = (to) => {
@@ -17,19 +17,40 @@ $(() => {
     }
 
     $('#modal #sendModalMessage').on('click', () => {
-        socket.emit('priv message', $('#modal label span').text(), $('#modal #modalMessage').val());
+        let msg = $('#modal #modalMessage').val();
+        if (/^[^[\]<>]{1,120}$/i.test(msg)) {
+            socket.emit('priv message', $('#modal label span').text(), msg);
+        } else {
+            M.toast({
+                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                displayLength: 4000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+        }
         $('#modal').modal('close');
     })
 
-
-
-
-
-
-    //priv message
-    socket.on('priv message', (name, date, msg) => {
-        alert(`From: ${name}\nDate: ${date}\nMessage: ${msg}`);
+    socket.on('priv message', (name, date, msg, from, feedback = false) => {
+        if (!feedback) {
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons red-text">mail</i>${name} <i class="tiny material-icons red-text">trending_flat</i> ${from} (${date}) : ${msg}`));
+            if ($('#autoscroll')[0].checked) $('#messages').animate({
+                scrollTop: $('#messages')[0].scrollHeight
+            }, 600);
+        } else {
+            if (feedback == 'yourself') feedback = 'You tried to send message yourself';
+            if (feedback == 'regex') feedback = 'Message validation error';
+            M.toast({
+                html: feedback,
+                displayLength: 4000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+        }
     });
+
+
+
 
 
     //previous messages

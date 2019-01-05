@@ -61,6 +61,11 @@ footer::after {
 ul {
     height: 150px;
     overflow-y: scroll;
+    padding-right: 20px;
+}
+
+#join-room{
+    margin-top: 60px;
 }
 
 #online-users i{

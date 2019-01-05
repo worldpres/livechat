@@ -34,11 +34,18 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('priv message', (to, msg) => {
-		if (msg != '' && msg != null) {
+		if (/^[^[\]<>]{1,120}$/i.test(msg)) {
 			let toId = users.find(v => v.name == to).id;
-			let name = users.find(v => v.id == socket.id).name;
-			let date = new Date().toLocaleString('pl-PL');
-			socket.broadcast.to(toId).emit('priv message', name, date, msg);
+			if (toId != socket.id) {
+				let name = users.find(v => v.id == socket.id).name;
+				let date = new Date().toLocaleString('pl-PL');
+				socket.broadcast.to(toId).emit('priv message', name, date, msg, to);
+				socket.emit('priv message', name, date, msg, to);
+			} else {
+				socket.emit('priv message', '', '', '', 'yourself');
+			}
+		} else {
+			socket.emit('priv message', '', '', '', 'regex');
 		}
 	});
 });
