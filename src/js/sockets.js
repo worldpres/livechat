@@ -1,0 +1,121 @@
+$(() => {
+    let socket = io();
+    let ioChat = io('/chat');
+
+    socket.on('online users', (users) => {
+        $('#online-users').html(users.map(v=>`${v}<i class="material-icons" onclick="privMessage('${v}')">chat</i>`).join(', '));
+    });
+
+
+
+
+
+
+    privMessage = (to) => {
+        socket.emit('priv message', to, prompt(`Your message to ${to}...`));
+    }
+    //priv message
+    socket.on('priv message', (name, date, msg) => {
+        alert(`From: ${name}\nDate: ${date}\nMessage: ${msg}`);
+    });
+
+
+    //previous messages
+    ioChat.on('previous messages', (messages) => {
+        if(messages.length){
+            $('#messages').html(messages.map(v=>`<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+            $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+        }
+    });
+
+    //nick-change
+    $('form#nick-change').submit((e) => {
+        e.preventDefault();
+        ioChat.emit('nick change', $('#my-nick').val());
+        return false;
+    });
+    ioChat.on('nick changed or not', (nick, changed) => {
+        if (!changed){
+            M.toast({
+                html: 'Incorrect nickname',
+                displayLength: 2000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+        }
+        $('#my-nick').attr('placeholder', nick).val('').focus().blur();
+    });
+
+    //who is typing
+    $('#message').keyup(() => {
+        ioChat.emit('im typing', true);
+    });
+    $('#message').blur(() => {
+        ioChat.emit('im typing', false);
+    });
+    ioChat.on('typers', (typers) => {
+        if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
+        else $('#typers').text(``);
+    });
+
+    //message send
+    $('form#message-send').submit(() => {
+        ioChat.emit('message send', $('#message').val());
+        $('#message').val('');
+        $('form#message-send button').attr('disabled', 'disabled');
+        setTimeout(() => {
+            $('form#message-send button').removeAttr('disabled');
+        }, 2000);
+        return false;
+    });
+    ioChat.on('message sent', (name, date, msg) => {
+        $('#messages').append($('<li>').text(`${name} (${date}) : ${msg}`));
+        if ($('#autoscroll')[0].checked) $('#messages').animate({ scrollTop: $('#messages')[0].scrollHeight }, 600);
+        $('#message').blur().focus();
+        M.toast({
+            html: 'New message',
+            displayLength: 1000,
+            inDuration: 100,
+            outDuration: 100,
+        });
+        playSound(); //time, freq, type, volume
+    });
+
+    //join room
+    $('form#join-room').submit(() => {
+        ioChat.emit('room join', $('#my-room').val());
+        $('#my-room').val('').focus().blur();
+        return false;
+    });
+
+    joinToRoom = (room) => {
+        $('#my-room').val(room.split('(')[0]).focus();
+    }
+    //existing rooms
+    ioChat.on('existing rooms', (rooms) => {
+        $('#existing-rooms-length').text(rooms.length);
+        $('#existing-rooms').html(rooms.map(v=>`<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
+    });
+
+    messageToRoom = (to) => {
+        ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
+    }
+    leaveRoom = (room) => {
+        if(confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
+    }
+    //my rooms update
+    ioChat.on('my rooms', (rooms) => {
+        $('#my-rooms').html(rooms.map(v=>`${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="leaveRoom('${v}')">&#x274C</span>`).join(', '));
+    });
+
+    //message to room
+    ioChat.on('message to room', (name, date, msg, to) => {
+        playSound(1000, 3000, 'sawtooth', 0.3, true);
+        $('#modal h4').text(`New message`);
+        $('#modal h5').text(`From ${name} (room: ${to})`);
+        $('#modal h6').text(`Date: ${date}`);
+        $('#modal p').text(`Message: ${msg}`);
+        M.Modal.getInstance($('#modal')).open();
+    });
+
+});

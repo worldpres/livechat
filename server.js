@@ -1,5 +1,5 @@
 const express = require('express');
-const app = express(); //because of correct css path
+const app = express();
 const http = require('http').Server(app);
 const ip = require('ip');
 const io = require('socket.io')(http);
@@ -11,7 +11,7 @@ http.listen(port, () => {
 	console.log(`listening on ${ip.address()}:${port}`);
 });
 
-app.use(express.static(__dirname + '/src')); //because of correct css path
+app.use(express.static(__dirname + '/src'));
 
 app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
@@ -24,7 +24,6 @@ io.on('connection', (socket) => {
 		id: socket.id,
 		name: `guest${new Date().getTime()}`,
 		typing: false,
-		waiting: false,
 		rooms: [],
 	});
 	io.emit('online users', users.map(v => v.name));
