@@ -74,7 +74,7 @@
 				return false;
 			});
 			ioChat.on('nick changed or not', (nick, changed) => {
-				if (!changed) alert(`Incorrect nickname`);
+				if (!changed) M.toast({html: 'Incorrect nickname'});
 				$('#my-nick').attr('placeholder', nick).val('');
 				$('#my-nick').focus().blur();
 			});
@@ -111,7 +111,7 @@
 			//join room
 			$('form#join-room').submit(() => {
 				ioChat.emit('room join', $('#my-room').val());
-				$('#my-room').val('');
+				$('#my-room').val('').focus().blur();;
 				return false;
 			});
 
