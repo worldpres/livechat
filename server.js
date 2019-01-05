@@ -58,16 +58,16 @@ ioChat.on('connection', (socket) => {
 
 	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
 
-	
-
-	
-
-	// existing my rooms
 	socket.emit('my rooms', users.find(v => v.id == id).rooms);
 
-	//show nickname into placeholder by emit to sender-client only
 	socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
 
+
+
+
+
+
+	
 	//show previous messages
 	MongoClient.connect(url, {
 		useNewUrlParser: true,

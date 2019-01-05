@@ -54,20 +54,64 @@ $(() => {
         $('#existing-rooms').html(rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
     });
 
-    joinToRoom = (room) => {
-        $('#my-room').val(room.split('(')[0]).focus();
-    }
+    ioChat.on('my rooms', (rooms) => {
+        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="messageToRoom('${v}')"><i class="material-icons green-text">chat</i></span> <span onclick="leaveRoom('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
+    });
+    
+    ioChat.on('nick changed or not', (nick, changed) => {
+        if (!changed) {
+            M.toast({
+                html: 'Incorrect nickname',
+                displayLength: 2000,
+                inDuration: 100,
+                outDuration: 100,
+            });
+        }
+        $('#my-nick').attr('placeholder', nick).val('').focus().blur();
+    });
+
+
+
+
+
+
+
+
+
 
 
     //join room
+    joinToRoom = (room) => {
+        $('#my-room').val(room.split('(')[0]).focus();
+    }
+    
     $('form#join-room').submit(() => {
         ioChat.emit('room join', $('#my-room').val());
         $('#my-room').val('').focus().blur();
         return false;
     });
+    messageToRoom = (to) => {
+        ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
+    }
+    leaveRoom = (room) => {
+        if (confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
+    }
+    //message to room
+    ioChat.on('message to room', (name, date, msg, to) => {
+        playSound(1000, 3000, 'sawtooth', 0.3, true);
+        $('#modal h4').text(`New message`);
+        $('#modal h5').text(`From ${name} (room: ${to})`);
+        $('#modal h6').text(`Date: ${date}`);
+        $('#modal p').text(`Message: ${msg}`);
+        M.Modal.getInstance($('#modal')).open();
+    });
 
-    
-    //existing rooms
+
+
+
+
+
+
     
 
 
@@ -94,17 +138,7 @@ $(() => {
         ioChat.emit('nick change', $('#my-nick').val());
         return false;
     });
-    ioChat.on('nick changed or not', (nick, changed) => {
-        if (!changed) {
-            M.toast({
-                html: 'Incorrect nickname',
-                displayLength: 2000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        }
-        $('#my-nick').attr('placeholder', nick).val('').focus().blur();
-    });
+    
 
     //who is typing
     $('#message').keyup(() => {
@@ -141,29 +175,6 @@ $(() => {
             outDuration: 100,
         });
         playSound(); //time, freq, type, volume
-    });
-
-    
-
-    messageToRoom = (to) => {
-        ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
-    }
-    leaveRoom = (room) => {
-        if (confirm(`Do you want to leave room ${room}?`)) ioChat.emit('leave room', room);
-    }
-    //my rooms update
-    ioChat.on('my rooms', (rooms) => {
-        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="messageToRoom('${v}')">&#x1F4DD;</span><span onclick="leaveRoom('${v}')">&#x274C</span>`).join(', '));
-    });
-
-    //message to room
-    ioChat.on('message to room', (name, date, msg, to) => {
-        playSound(1000, 3000, 'sawtooth', 0.3, true);
-        $('#modal h4').text(`New message`);
-        $('#modal h5').text(`From ${name} (room: ${to})`);
-        $('#modal h6').text(`Date: ${date}`);
-        $('#modal p').text(`Message: ${msg}`);
-        M.Modal.getInstance($('#modal')).open();
     });
 
 });
