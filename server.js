@@ -34,6 +34,26 @@ app.get('/mongou', (req, res) => {
 		});
 	});
 });
+app.get('/mongoui', (req, res) => {
+	MongoClient.connect(url, {
+		useNewUrlParser: true,
+	}, function (err, db) {
+		if (err) throw err;
+		var dbo = db.db('livechat');
+		var query = {
+			item: "card",
+			qty: 15
+		};
+		try {
+			dbo.collection('messages').insertOne(query);
+			db.close();
+			console.log('inserted');
+		} catch (e) {
+			console.log(e);
+		};
+	});
+	res.send('result');
+});
 
 
 let users = [];
