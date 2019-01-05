@@ -55,9 +55,7 @@
 
 			//previous messages
 			ioChat.on('previous messages', (messages) => {
-				if(messages.length) messages.map(v => {
-					$('#messages').append($('<li>').text(`${v.name} (${v.date}) : ${v.msg}`));
-				});
+				if(messages.length) $('#messages').html(messages.map(v=>`<li>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
 			});
 
 			//nick-change
