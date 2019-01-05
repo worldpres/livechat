@@ -16,6 +16,7 @@ $(() => {
             }
         });
         $('#modal').modal('open');
+        $('#modal #modalMessage').focus();
     }
 
     $('#modal #sendModalMessagePriv').on('click', () => {
