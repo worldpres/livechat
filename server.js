@@ -4,6 +4,8 @@ const http = require('http').Server(app);
 const ip = require('ip');
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000;
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb://livechat10:livechat10@ds149754.mlab.com:49754/livechat';
 
 http.listen(port, () => {
 	console.log(`listening on ${ip.address()}:${port}`);
@@ -14,47 +16,6 @@ app.use(express.static(__dirname + '/src')); //because of correct css path
 app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
 });
-
-
-const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://livechat10:livechat10@ds149754.mlab.com:49754/livechat';
-
-app.get('/mongou', (req, res) => {
-	MongoClient.connect(url, {
-		useNewUrlParser: true,
-	}, function (err, db) {
-		if (err) throw err;
-		var dbo = db.db('livechat');
-		var query = {};
-		dbo.collection('messages').find(query).toArray(function (err, result) {
-			if (err) throw err;
-			db.close();
-			console.log('API: all documents readed');
-			res.send(result);
-		});
-	});
-});
-app.get('/mongoui', (req, res) => {
-	MongoClient.connect(url, {
-		useNewUrlParser: true,
-	}, function (err, db) {
-		if (err) throw err;
-		var dbo = db.db('livechat');
-		var query = {
-			item: "card",
-			qty: 15
-		};
-		try {
-			dbo.collection('messages').insertOne(query);
-			db.close();
-			console.log('inserted');
-		} catch (e) {
-			console.log(e);
-		};
-	});
-	res.send('result');
-});
-
 
 let users = [];
 
@@ -85,7 +46,6 @@ io.on('connection', (socket) => {
 
 //chat
 let ioChat = io.of('/chat');
-let messages = [];
 
 ioChat.on('connection', (socket) => {
 	const id = socket.id.substr(socket.id.indexOf('#') + 1);
@@ -100,7 +60,18 @@ ioChat.on('connection', (socket) => {
 	socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
 
 	//show previous messages
-	socket.emit('previous messages', messages);
+	MongoClient.connect(url, {
+		useNewUrlParser: true,
+	}, (err, db) => {
+		if (err) throw err;
+		var dbo = db.db('livechat');
+		var query = {};
+		dbo.collection('messages').find(query).toArray((err, result) => {
+			if (err) throw err;
+			db.close();
+			socket.emit('previous messages', result);
+		});
+	});
 
 	//change my nick
 	socket.on('nick change', (nick) => {
@@ -125,12 +96,24 @@ ioChat.on('connection', (socket) => {
 		if (msg != '') {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
-			ioChat.emit('message sent', name, date, msg);
-			messages.push({
-				name: name,
-				date: date,
-				msg: msg
+			MongoClient.connect(url, {
+				useNewUrlParser: true,
+			}, (err, db) => {
+				if (err) throw err;
+				var dbo = db.db('livechat');
+				var query = {
+					name: name,
+					date: date,
+					msg: msg
+				};
+				try {
+					dbo.collection('messages').insertOne(query);
+					db.close();
+				} catch (e) {
+					console.log(e);
+				};
 			});
+			ioChat.emit('message sent', name, date, msg);
 		}
 	});
 
