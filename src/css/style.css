@@ -68,7 +68,8 @@ ul {
     margin-top: 60px;
 }
 
-#online-users i{
+#online-users i,
+#existing-rooms span{
     cursor: pointer;
 }
 
@@ -81,7 +82,7 @@ ul {
 /* scrollbar */
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 15px;
 }
 
 /* Track */
@@ -92,6 +93,7 @@ ul {
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: var(--blue);
+    border-radius: 2px;
 }
 
 /* Handle on hover */

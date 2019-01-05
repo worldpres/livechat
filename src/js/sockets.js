@@ -49,6 +49,31 @@ $(() => {
         }
     });
 
+    ioChat.on('existing rooms', (rooms) => {
+        $('#existing-rooms-length').text(rooms.length);
+        $('#existing-rooms').html(rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
+    });
+
+    joinToRoom = (room) => {
+        $('#my-room').val(room.split('(')[0]).focus();
+    }
+
+
+    //join room
+    $('form#join-room').submit(() => {
+        ioChat.emit('room join', $('#my-room').val());
+        $('#my-room').val('').focus().blur();
+        return false;
+    });
+
+    
+    //existing rooms
+    
+
+
+
+
+
 
 
 
@@ -118,21 +143,7 @@ $(() => {
         playSound(); //time, freq, type, volume
     });
 
-    //join room
-    $('form#join-room').submit(() => {
-        ioChat.emit('room join', $('#my-room').val());
-        $('#my-room').val('').focus().blur();
-        return false;
-    });
-
-    joinToRoom = (room) => {
-        $('#my-room').val(room.split('(')[0]).focus();
-    }
-    //existing rooms
-    ioChat.on('existing rooms', (rooms) => {
-        $('#existing-rooms-length').text(rooms.length);
-        $('#existing-rooms').html(rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
-    });
+    
 
     messageToRoom = (to) => {
         ioChat.emit('message to room', to, prompt(`Your message to ${to}...`));
