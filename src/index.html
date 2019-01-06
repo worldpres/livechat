@@ -77,7 +77,7 @@
 			<div class="row">
 				<form id="message-send">
 					<div class="input-field col s12 m8 l6 offset-l1">
-						<input type="text" id="message" autocomplete="off" data-length="120">
+						<input type="text" id="message" autocomplete="off" data-length="120" v-on:keyup="imTyping(true)" v-on:blur="imTyping(false)">
 						<label for="message">Write your message</label>
 					</div>
 					<button class="waves-effect waves-light btn blue col s12 m4 l4"><i class="material-icons right">send</i>Send</button>

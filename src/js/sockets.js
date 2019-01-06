@@ -71,6 +71,9 @@ $(() => {
                     });
                 }
                 return false;
+            },
+            imTyping: function (bool){
+                ioChat.emit('im typing', bool);
             }
         }
     });
@@ -168,12 +171,6 @@ $(() => {
         return false;
     });
 
-    $('#message').keyup(() => {
-        ioChat.emit('im typing', true);
-    });
-    $('#message').blur(() => {
-        ioChat.emit('im typing', false);
-    });
     ioChat.on('who is typing', (typers) => {
         if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
         else $('#typers').text(``);
