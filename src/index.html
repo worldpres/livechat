@@ -75,12 +75,12 @@
 
 		<div class="container">
 			<div class="row">
-				<form id="message-send">
+				<form id="message-send" v-on:submit="messageSend">
 					<div class="input-field col s12 m8 l6 offset-l1">
-						<input type="text" id="message" autocomplete="off" data-length="120" v-on:keyup="imTyping(true)" v-on:blur="imTyping(false)">
+						<input type="text" id="message" autocomplete="off" data-length="120" v-on:keyup="imTyping(true)" v-on:blur="imTyping(false)" v-model="message">
 						<label for="message">Write your message</label>
 					</div>
-					<button class="waves-effect waves-light btn blue col s12 m4 l4"><i class="material-icons right">send</i>Send</button>
+					<button class="waves-effect waves-light btn blue col s12 m4 l4" :disabled="messageSendDisabled"><i class="material-icons right">send</i>Send</button>
 				</form>
 			</div>
 		</div>

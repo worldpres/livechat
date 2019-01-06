@@ -15,6 +15,8 @@ $(() => {
             myRoom: ``,
             myRooms: ``,
             myNick: ``,
+            message: ``,
+            messageSendDisabled: false,
         },
         methods: {
             joinRoom: function (e) {
@@ -54,6 +56,26 @@ $(() => {
                         outDuration: 100,
                     });
                 }
+                return false;
+            },
+            messageSend: function (e) {
+                e.preventDefault();
+                if (/^[^[\]<>]{1,120}$/i.test(this.message)) {
+                    ioChat.emit('message send', this.message);
+                    this.message = ``;
+                } else {
+                    if (vueAppMain.notify) M.toast({
+                        html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                        displayLength: 4000,
+                        inDuration: 100,
+                        outDuration: 100,
+                    });
+                }
+                $('#message').focus();
+                this.messageSendDisabled = true;
+                setTimeout(() => {
+                    this.messageSendDisabled = false;
+                }, 2000);
                 return false;
             }
         }
@@ -200,28 +222,6 @@ $(() => {
     ioChat.on('who is typing', (typers) => {
         if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
         else $('#typers').text(``);
-    });
-
-    $('#message-send').submit((e) => {
-        e.preventDefault();
-        let msg = $('#message').val();
-        if (/^[^[\]<>]{1,120}$/i.test(msg)) {
-            ioChat.emit('message send', msg);
-            $('#message').val('');
-        } else {
-            if (vueAppMain.notify) M.toast({
-                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
-                displayLength: 4000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-            $('#message').focus();
-        }
-        $('#message-send button').attr('disabled', 'disabled');
-        setTimeout(() => {
-            $('#message-send button').removeAttr('disabled');
-        }, 2000);
-        return false;
     });
 
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
