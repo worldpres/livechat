@@ -1,6 +1,56 @@
 $(() => {
+    
     let socket = io();
     let ioChat = io('/chat');
+
+    vueAppFooter = new Vue({
+        el: '#footer',
+        data: {
+            copyYear: new Date().getFullYear(),
+        }
+    });
+
+    vueAppModal = new Vue({
+        el: '#modal-message',
+        data: {
+            label: ``,
+            message: ``,
+            to: ``,
+            room: false,
+        },
+        methods: {
+            modalMessageSend: (e) => {
+                e.preventDefault();
+                if (/^[^[\]<>]{1,120}$/i.test(vueAppModal.message)) {
+                    if (vueAppModal.room) ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
+                    else socket.emit('priv message', vueAppModal.to, vueAppModal.message);
+                } else {
+                    if (vueAppMain.notify) M.toast({
+                        html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                        displayLength: 4000,
+                        inDuration: 100,
+                        outDuration: 100,
+                    });
+                }
+                $('#modal-message').modal('close');
+            }
+        }
+    });
+
+    vueAppMain = new Vue({
+        el: '#vue-app-main',
+        data: {
+            onlineUsers: ``,
+            notify: true,
+            sound: true,
+            autoscroll: true,
+        }
+    });
+
+
+    $('#modal-message #message, #my-nick, #message-send #message, #my-room').characterCounter();
+    $('.modal').modal();
+
 
     socket.on('online users', (users) => {
         vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalMessage('${v}')">chat</i>`).join(', ');
@@ -18,22 +68,6 @@ $(() => {
             }
         }).modal('open');
     }
-
-    $('#modal-message').on('submit', (e) => {
-        e.preventDefault();
-        if (/^[^[\]<>]{1,120}$/i.test(vueAppModal.message)) {
-            if (vueAppModal.room) ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
-            else socket.emit('priv message', vueAppModal.to, vueAppModal.message);
-        } else {
-            if (vueAppMain.notify) M.toast({
-                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
-                displayLength: 4000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        }
-        $('#modal-message').modal('close');
-    })
 
     socket.on('priv message', (name, date, msg, from, feedback = false) => {
         if (!feedback) {

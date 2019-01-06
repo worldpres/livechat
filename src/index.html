@@ -134,7 +134,7 @@
 	</footer>
 
 	<div id="modal-message" class="modal">
-		<form>
+		<form v-on:submit="modalMessageSend">
 			<div class="modal-content">
 				<div class="input-field">
 					<input type="text" id="message" autocomplete="off" data-length="120" v-model="message">
@@ -166,7 +166,6 @@
 	<script src="js/jquery-1.11.1.js"></script>
 	<script src="js/materialize.js"></script>
 	<script src="js/playsound.js"></script>
-	<script src="js/script.js"></script>
 	<script src="js/sockets.js"></script>
 	<!-- development version, includes helpful console warnings -->
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
