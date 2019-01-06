@@ -142,6 +142,7 @@ ioChat.on('connection', (socket) => {
 			let name = users.find(v => v.id == id).name;
 			let date = new Date().toLocaleString('pl-PL');
 			socket.broadcast.to(to).emit('message to room', name, date, msg, to);
+			socket.emit('message to room', name, date, msg, to);
 		}
 	});
 });
