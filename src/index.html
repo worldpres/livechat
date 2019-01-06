@@ -152,10 +152,10 @@
 	</div>
 
 	<div id="modal-confirm" class="modal">
-		<div class="modal-content"></div>
+		<div class="modal-content">{{content}}</div>
 		<div class="modal-footer">
 			<a href="#!" class="modal-close waves-effect waves-light btn-small grey left">Cancel</a>
-			<button id="confirmModal" class="waves-effect waves-light btn-small red right">
+			<button id="confirmModal" class="waves-effect waves-light btn-small red right" v-on:click="confirmed">
 				<i class="material-icons white-text right">delete_forever</i>
 				Delete
 			</button>

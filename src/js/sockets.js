@@ -10,6 +10,26 @@ $(() => {
         }
     });
 
+    vueAppConfirm = new Vue({
+        el: '#modal-confirm',
+        data: {
+            content: ``,
+            delRoom: ``,
+        },
+        methods: {
+            confirmed: function () {
+                ioChat.emit('leave room', this.delRoom);
+                $('#modal-confirm').modal('close');
+                if (vueAppMain.notify) M.toast({
+                    html: `You leaved room ${this.delRoom}`,
+                    displayLength: 2000,
+                    inDuration: 100,
+                    outDuration: 100,
+                });
+            }
+        }
+    });
+
     vueAppModal = new Vue({
         el: '#modal-message',
         data: {
@@ -72,7 +92,7 @@ $(() => {
                 }
                 return false;
             },
-            imTyping: function (bool){
+            imTyping: function (bool) {
                 ioChat.emit('im typing', bool);
             }
         }
@@ -224,20 +244,10 @@ $(() => {
     });
 
     confirmModal = (room) => {
-        $('#modal-confirm .modal-content').html(`Do you want to leave room <span>${room}</span>?`);
+        vueAppConfirm.content = `Do you want to leave room ${room}?`;
+        vueAppConfirm.delRoom = room;
         $('#modal-confirm').modal('open');
     }
-    $('#modal-confirm #confirmModal').on('click', () => {
-        let room = $('#modal-confirm .modal-content span').text();
-        ioChat.emit('leave room', room);
-        $('#modal-confirm').modal('close');
-        if (vueAppMain.notify) M.toast({
-            html: `You leaved room ${room}`,
-            displayLength: 2000,
-            inDuration: 100,
-            outDuration: 100,
-        });
-    });
 
     ioChat.on('message to room', (name, date, msg, to) => {
         $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalMessage('${to}', true)">reply_all</i>`));
