@@ -91,6 +91,10 @@ ul {
     display: inline-block;
 }
 
+i.tiny {
+    font-size: 1.5rem;
+}
+
 /* scrollbar */
 /* width */
 ::-webkit-scrollbar {
