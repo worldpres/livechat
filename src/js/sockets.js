@@ -240,4 +240,18 @@ $(() => {
         });
         if (vueAppMain.sound) playSound(1000, 3000, 'sawtooth', 0.3, true);
     });
+
+    ioChat.on('somebody connected to room', (somebody, room) => {
+        if (vueAppMain.notify) M.toast({
+            html: `${somebody} connected to room ${room}`,
+            displayLength: 2000,
+        });
+    });
+
+    ioChat.on('somebody disconnected from room', (somebody, room) => {
+        if (vueAppMain.notify) M.toast({
+            html: `${somebody} disconnected from room ${room}`,
+            displayLength: 2000,
+        });
+    });
 });

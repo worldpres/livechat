@@ -162,6 +162,7 @@ ioChat.on('connection', (socket) => {
 			}
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
+			socket.broadcast.to(room).emit('somebody connected to room', users.find(v => v.id == id).name, room);
 		}
 	});
 
@@ -171,6 +172,7 @@ ioChat.on('connection', (socket) => {
 			users.find(v => v.id == id).rooms = users.find(v => v.id == id).rooms.filter(v => v != room);
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
+			socket.broadcast.to(room).emit('somebody disconnected from room', users.find(v => v.id == id).name, room);
 		}
 	});
 });
