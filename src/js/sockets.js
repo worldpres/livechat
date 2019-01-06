@@ -14,9 +14,9 @@ $(() => {
             messageSendDisabled: false,
             onlineUsers: ``,
             myRoom: ``,
+            myRooms: ``,
             existingRoomsLength: 0,
             existingRooms: ``,
-            myRooms: ``,
         },
         methods: {
             changeNick: function (e) {
@@ -49,6 +49,9 @@ $(() => {
                 }, 2000);
                 return false;
             },
+            imTyping: function (bool) {
+                ioChat.emit('im typing', bool);
+            },
             joinRoom: function (e) {
                 e.preventDefault();
                 if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myRoom)) {
@@ -68,9 +71,6 @@ $(() => {
                     });
                 }
                 return false;
-            },
-            imTyping: function (bool) {
-                ioChat.emit('im typing', bool);
             }
         }
     });
@@ -82,7 +82,7 @@ $(() => {
         }
     });
 
-    vueAppModal = new Vue({
+    vueAppModalMessage = new Vue({
         el: '#modal-message',
         data: {
             label: ``,
@@ -100,8 +100,6 @@ $(() => {
                     if (vueAppMain.notify) M.toast({
                         html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                         displayLength: 4000,
-                        inDuration: 100,
-                        outDuration: 100,
                     });
                 }
                 $('#modal-message').modal('close');
@@ -135,14 +133,14 @@ $(() => {
 
 
     modalMessage = (to, room = false) => {
-        vueAppModal.label = `Write Your private message to ${to}`;
-        vueAppModal.message = ``;
-        vueAppModal.to = to;
-        vueAppModal.room = room;
-        if (room) vueAppModal.label = `Write Your message to room ${to}`;
+        vueAppModalMessage.label = `Write Your private message to ${to}`;
+        vueAppModalMessage.message = ``;
+        vueAppModalMessage.to = to;
+        vueAppModalMessage.room = room;
+        if (room) vueAppModalMessage.label = `Write Your message to room ${to}`;
         $('#modal-message').modal({
             onOpenEnd: (modal) => {
-                $(modal).find('#message').val(vueAppModal.message).focus();
+                $(modal).find('#message').val(vueAppModalMessage.message).focus();
             }
         }).modal('open');
     }
