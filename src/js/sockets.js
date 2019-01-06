@@ -14,6 +14,7 @@ $(() => {
             existingRooms: ``,
             myRoom: ``,
             myRooms: ``,
+            myNick: ``,
         },
         methods: {
             joinRoom: function (e) {
@@ -40,6 +41,20 @@ $(() => {
             },
             imTyping: function (bool) {
                 ioChat.emit('im typing', bool);
+            },
+            changeNick: function (e) {
+                e.preventDefault();
+                if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myNick)) {
+                    ioChat.emit('nick change', this.myNick);
+                } else {
+                    if (vueAppMain.notify) M.toast({
+                        html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
+                        displayLength: 2000,
+                        inDuration: 100,
+                        outDuration: 100,
+                    });
+                }
+                return false;
             }
         }
     });
@@ -180,22 +195,6 @@ $(() => {
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
         }
-    });
-
-    $('#nick-change').submit((e) => {
-        e.preventDefault();
-        let nick = $('#my-nick').val();
-        if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(nick)) {
-            ioChat.emit('nick change', nick);
-        } else {
-            if (vueAppMain.notify) M.toast({
-                html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
-                displayLength: 2000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        }
-        return false;
     });
 
     ioChat.on('who is typing', (typers) => {

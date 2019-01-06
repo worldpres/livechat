@@ -24,9 +24,9 @@
 
 		<div class="container">
 			<div class="row">
-				<form id="nick-change">
+				<form id="nick-change" v-on:submit="changeNick">
 					<div class="input-field col s12 m8 l6 offset-l1">
-						<input type="text" id="my-nick" placeholder="Your nickname" autocomplete="off" data-length="10">
+						<input type="text" id="my-nick" placeholder="Your nickname" autocomplete="off" data-length="10" v-model="myNick">
 						<label for="my-nick">Your nickname</label>
 					</div>
 					<button class="waves-effect waves-light btn blue col s12 m4 l4">
