@@ -18,6 +18,7 @@ $(() => {
             existingRoomsLength: 0,
             existingRooms: ``,
             typers: ``,
+            messages: ``,
         },
         methods: {
             changeNick: function (e) {
@@ -163,7 +164,7 @@ $(() => {
     socket.on('priv message', (name, date, msg, to, feedback = false) => {
         if (!feedback) {
             feedback = 'New private message';
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalMessage('${name}')">reply</i>`));
+            vueAppMain.messages += `<li><i class="tiny material-icons orange-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalMessage('${name}')">reply</i></li>`;
             if (vueAppMain.autoscroll) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -199,7 +200,7 @@ $(() => {
 
     ioChat.on('previous messages', (messages) => {
         if (messages.length) {
-            $('#messages').html(messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i> <small>(${new Date(v.date).toLocaleString('pl-PL')})</small> ${v.name} : <em>${v.msg}</em></li>`).join(''));
+            vueAppMain.messages = messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i> <small>(${new Date(v.date).toLocaleString('pl-PL')})</small> ${v.name} : <em>${v.msg}</em></li>`).join('');
             $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -212,7 +213,7 @@ $(() => {
 
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
         if (feedback) {
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} : <em>${msg}</em>`));
+            vueAppMain.messages += `<li><i class="tiny material-icons grey-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} : <em>${msg}</em></li>`;
             if (vueAppMain.autoscroll) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -230,7 +231,7 @@ $(() => {
     });
 
     ioChat.on('message to room', (name, date, msg, to) => {
-        $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalMessage('${to}', true)">reply_all</i>`));
+        vueAppMain.messages += `<li><i class="tiny material-icons green-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalMessage('${to}', true)">reply_all</i></li>`;
         if (vueAppMain.autoscroll) $('#messages').animate({
             scrollTop: $('#messages')[0].scrollHeight
         }, 600);
