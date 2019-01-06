@@ -37,9 +37,7 @@ app.get('/del', (req, res) => {
 		});
 		try {
 			dbo.collection('messages').deleteMany(query).then(result => {
-				deletedCount = result.deletedCount;
-				// res.send(`Deleted ${deletedCount} documents older than ${minutes} minute(s).`);
-				res.send(`<!doctype html><html><head><title>live chat</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="img/favicon.png"></head><body>Deleted ${deletedCount} documents older than ${minutes} minute(s).</body></html>`);
+				res.send(`<!doctype html><html><head><title>live chat</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="img/favicon.png"></head><body>Deleted ${result.deletedCount} documents older than ${minutes} minute(s).</body></html>`);
 			});
 		} catch (e) {
 			console.log(e);
