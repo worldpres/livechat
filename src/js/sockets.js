@@ -8,12 +8,10 @@ $(() => {
 
     modalMessage = (to, room = false) => {
         vueAppModal.label = `Write Your private message to ${to}`;
-        vueAppModal.to = to;
         vueAppModal.message = ``;
+        vueAppModal.to = to;
         vueAppModal.room = room;
-        if (room) {
-            vueAppModal.label = `Write Your message to room ${to}`;
-        }
+        if (room) vueAppModal.label = `Write Your message to room ${to}`;
         $('#modal-message').modal({
             onOpenEnd: (modal) => {
                 $(modal).find('#message').val(vueAppModal.message).focus();
@@ -24,11 +22,8 @@ $(() => {
     $('#modal-message').on('submit', (e) => {
         e.preventDefault();
         if (/^[^[\]<>]{1,120}$/i.test(vueAppModal.message)) {
-            if (vueAppModal.room) {
-                ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
-            } else {
-                socket.emit('priv message', vueAppModal.to, vueAppModal.message);
-            }
+            if (vueAppModal.room) ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
+            else socket.emit('priv message', vueAppModal.to, vueAppModal.message);
         } else {
             if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
