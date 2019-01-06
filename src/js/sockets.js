@@ -23,7 +23,7 @@ $(() => {
         if (/^[^[\]<>]{1,120}$/i.test(msg)) {
             socket.emit('priv message', $('#modal-message-priv label span').text(), msg);
         } else {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -44,7 +44,7 @@ $(() => {
             if (feedback == 'yourself') feedback = 'You tried to send message yourself';
             if (feedback == 'regex') feedback = 'Message validation error';
         }
-        M.toast({
+        if ($('#notify')[0].checked) M.toast({
             html: feedback,
             displayLength: 2000,
             inDuration: 100,
@@ -68,7 +68,7 @@ $(() => {
 
     ioChat.on('nick changed or not', (nick, changed) => {
         if (!changed) {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
@@ -93,7 +93,7 @@ $(() => {
         if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(nick)) {
             ioChat.emit('nick change', nick);
         } else {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
@@ -121,7 +121,7 @@ $(() => {
             ioChat.emit('message send', msg);
             $('#message').val('');
         } else {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -143,7 +143,7 @@ $(() => {
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
             $('#message').blur().focus();
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: 'New message',
                 displayLength: 1000,
                 inDuration: 100,
@@ -151,7 +151,7 @@ $(() => {
             });
             if ($('#sound')[0].checked) playSound(); //time, freq, type, volume
         } else {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -167,14 +167,14 @@ $(() => {
         if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
             ioChat.emit('room join', room);
             $('#my-room').val('').focus().blur();
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `You joined to room ${room}`,
                 displayLength: 2000,
                 inDuration: 100,
                 outDuration: 100,
             });
         } else {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
@@ -192,7 +192,7 @@ $(() => {
         let room = $('#modal-confirm .modal-content span').text();
         ioChat.emit('leave room', room);
         $('#modal-confirm').modal('close');
-        M.toast({
+        if ($('#notify')[0].checked) M.toast({
             html: `You leaved room ${room}`,
             displayLength: 2000,
             inDuration: 100,
@@ -216,7 +216,7 @@ $(() => {
         if (/^[^[\]<>]{1,120}$/i.test(msg)) {
             ioChat.emit('message to room', $('#modal-message-room label span').text(), msg);
         } else {
-            M.toast({
+            if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -231,7 +231,7 @@ $(() => {
         if ($('#autoscroll')[0].checked) $('#messages').animate({
             scrollTop: $('#messages')[0].scrollHeight
         }, 600);
-        M.toast({
+        if ($('#notify')[0].checked) M.toast({
             html: `New message to ${to} room`,
             displayLength: 2000,
             inDuration: 100,

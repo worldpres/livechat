@@ -6,7 +6,7 @@
 
 ## TODO
 - format danych w bazie
-- switch dla dzieku i notyfikacji
+- room message nie wyswietla u wysylajacego
 
 ### About WebSocket
 
