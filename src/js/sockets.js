@@ -217,22 +217,16 @@ $(() => {
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
             $('#message').blur().focus();
-            if (vueAppMain.notify) M.toast({
-                html: 'New message',
-                displayLength: 1000,
-                inDuration: 100,
-                outDuration: 100,
-            });
+            feedback = `New message`;
             if (vueAppMain.sound) playSound(); //time, freq, type, volume
         } else {
-            if (vueAppMain.notify) M.toast({
-                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
-                displayLength: 4000,
-                inDuration: 100,
-                outDuration: 100,
-            });
+            feedback = `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`;
             $('#message').focus();
         }
+        if (vueAppMain.notify) M.toast({
+            html: feedback,
+            displayLength: 2000,
+        });
     });
 
     ioChat.on('message to room', (name, date, msg, to) => {
