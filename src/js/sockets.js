@@ -80,7 +80,7 @@ $(() => {
 
     ioChat.on('previous messages', (messages) => {
         if (messages.length) {
-            $('#messages').html(messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i> <small>(${v.date})</small> ${v.name} : <em>${v.msg}</em></li>`).join(''));
+            $('#messages').html(messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i> <small>(${new Date(v.date).toLocaleString('pl-PL')})</small> ${v.name} : <em>${v.msg}</em></li>`).join(''));
             $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -138,7 +138,7 @@ $(() => {
 
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
         if (feedback) {
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i> <small>(${date})</small> ${name} : <em>${msg}</em>`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} : <em>${msg}</em>`));
             if ($('#autoscroll')[0].checked) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);

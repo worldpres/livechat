@@ -17,6 +17,35 @@ app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
 });
 
+app.get('/del', (req, res) => {
+	MongoClient.connect(url, {
+		useNewUrlParser: true,
+	}, (err, db) => {
+		if (err) throw err;
+		let minutes = parseFloat(req._parsedUrl.query);
+		let dbo = db.db('livechat');
+		let query = {
+			date: {
+				$lt: new Date().getTime() - minutes * 60 * 1000,
+			}
+		};
+		dbo.collection('messages').find(query).toArray((err, result) => {
+			if (err) throw err;
+			db.close();
+			console.log(`Documents to delete...`);
+			console.log(result);
+		});
+		try {
+			dbo.collection('messages').deleteMany(query).then(result => {
+				deletedCount = result.deletedCount;
+				res.send(`Deleted ${deletedCount} documents older than ${minutes} minute(s).`);
+			});
+		} catch (e) {
+			console.log(e);
+		}
+	});
+});
+
 let users = [];
 
 io.on('connection', (socket) => {
@@ -66,8 +95,8 @@ ioChat.on('connection', (socket) => {
 		useNewUrlParser: true,
 	}, (err, db) => {
 		if (err) throw err;
-		var dbo = db.db('livechat');
-		var query = {};
+		let dbo = db.db('livechat');
+		let query = {};
 		dbo.collection('messages').find(query).toArray((err, result) => {
 			if (err) throw err;
 			db.close();
@@ -93,13 +122,13 @@ ioChat.on('connection', (socket) => {
 	socket.on('message send', (msg) => {
 		if (/^[^[\]<>]{1,120}$/i.test(msg)) {
 			let name = users.find(v => v.id == id).name;
-			let date = new Date().toLocaleString('pl-PL');
+			let date = new Date().getTime();
 			MongoClient.connect(url, {
 				useNewUrlParser: true,
 			}, (err, db) => {
 				if (err) throw err;
-				var dbo = db.db('livechat');
-				var query = {
+				let dbo = db.db('livechat');
+				let query = {
 					date: date,
 					name: name,
 					msg: msg
