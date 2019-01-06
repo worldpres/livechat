@@ -139,7 +139,7 @@ i.tiny {
     cursor: pointer;
 }
 
-#typers {
+.typers {
     font-style: italic;
     color: gray;
     font-size: 13px;

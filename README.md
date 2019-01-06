@@ -7,7 +7,6 @@
 ## TODO
 - save nick
 - vuejs for ul#messages (priv, previous, message sent, message to room)
-- vuejs for #typers?
 
 
 ### About WebSocket

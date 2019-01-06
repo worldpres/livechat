@@ -17,6 +17,7 @@ $(() => {
             myRooms: ``,
             existingRoomsLength: 0,
             existingRooms: ``,
+            typers: ``,
         },
         methods: {
             changeNick: function (e) {
@@ -206,8 +207,7 @@ $(() => {
     });
 
     ioChat.on('who is typing', (typers) => {
-        if (typers.length) $('#typers').text(`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`);
-        else $('#typers').text(``);
+        vueAppMain.typers = (typers.length)?`${typers.join(', ')} ${(typers.length > 1) ? 'are' : 'is'} typing...`:``;
     });
 
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
