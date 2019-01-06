@@ -3,7 +3,7 @@ $(() => {
     let ioChat = io('/chat');
 
     socket.on('online users', (users) => {
-        $('#online-users').html(users.map(v => `${v}<i class="material-icons orange-text" onclick="modalPrivMessage('${v}')">chat</i>`).join(', '));
+        vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalPrivMessage('${v}')">chat</i>`).join(', ');
     });
 
     modalPrivMessage = (to) => {

@@ -13,7 +13,7 @@
 </head>
 
 <body>
-	<main>
+	<main id="vue-app-main">
 		<div class="container">
 			<div class="row">
 				<div class="col s12">
@@ -96,7 +96,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col s12 m12 l10 offset-l1">
-					<strong>Online users:</strong> <span id="online-users"></span>
+					<strong>Online users:</strong> <span id="online-users" v-html="onlineUsers"></span>
 				</div>
 			</div>
 		</div>
@@ -185,14 +185,12 @@
 	<script src="js/jquery-1.11.1.js"></script>
 	<script src="js/materialize.js"></script>
 	<script src="js/playsound.js"></script>
+	<script src="js/script.js"></script>
 	<script src="js/sockets.js"></script>
-	<script>
-		$(() => {
-			$('#modalMessage, #my-nick, #message, #my-room').characterCounter();
-			$('.modal').modal();
-		});
-	</script>
-
+	<!-- development version, includes helpful console warnings -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!-- production version, optimized for size and speed -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 </body>
 
 </html>
