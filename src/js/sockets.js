@@ -149,7 +149,7 @@ $(() => {
         $('#modal-confirm').modal('open');
     }
 
-    joinToRoom = (room) => {
+    quickJoinToRoom = (room) => {
         vueAppMain.myRoom = room.split('(')[0];
         $('#my-room').focus();
     }
@@ -181,7 +181,7 @@ $(() => {
 
     ioChat.on('existing rooms', (rooms) => {
         vueAppMain.existingRoomsLength = rooms.length;
-        vueAppMain.existingRooms = rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', ');
+        vueAppMain.existingRooms = rooms.map(v => `<span onclick="quickJoinToRoom('${v}')">${v}</span>`).join(', ');
     });
 
     ioChat.on('my rooms', (rooms) => {
