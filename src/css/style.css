@@ -128,7 +128,7 @@ ul {
     margin-top: 60px;
 }
 
-#online-users i,
+.online-users i,
 #existing-rooms span,
 #my-rooms span,
 #messages .reply {
