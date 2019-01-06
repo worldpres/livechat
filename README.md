@@ -1,6 +1,6 @@
 # Live Chat
 
-**FRONT**: *HTML* + *CSS* + *Javascript/jQuery* + *MaterializeCSS*
+**FRONT**: *HTML* + *CSS* + *Javascript/jQuery* + *MaterializeCSS* + *Vue.js*
 
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
