@@ -6,6 +6,7 @@ $(() => {
     vueAppMain = new Vue({
         el: '#vue-app-main',
         data: {
+            myNick: ``,
             onlineUsers: ``,
             notify: true,
             sound: true,
@@ -14,11 +15,22 @@ $(() => {
             existingRooms: ``,
             myRoom: ``,
             myRooms: ``,
-            myNick: ``,
             message: ``,
             messageSendDisabled: false,
         },
         methods: {
+            changeNick: function (e) {
+                e.preventDefault();
+                if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myNick)) {
+                    ioChat.emit('nick change', this.myNick);
+                } else {
+                    if (this.notify) M.toast({
+                        html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
+                        displayLength: 2000
+                    });
+                }
+                return false;
+            },
             joinRoom: function (e) {
                 e.preventDefault();
                 if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myRoom)) {
@@ -43,20 +55,6 @@ $(() => {
             },
             imTyping: function (bool) {
                 ioChat.emit('im typing', bool);
-            },
-            changeNick: function (e) {
-                e.preventDefault();
-                if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myNick)) {
-                    ioChat.emit('nick change', this.myNick);
-                } else {
-                    if (vueAppMain.notify) M.toast({
-                        html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
-                        displayLength: 2000,
-                        inDuration: 100,
-                        outDuration: 100,
-                    });
-                }
-                return false;
             },
             messageSend: function (e) {
                 e.preventDefault();
