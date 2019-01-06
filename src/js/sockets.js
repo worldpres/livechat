@@ -107,7 +107,7 @@ $(() => {
         }
     });
 
-    vueAppConfirm = new Vue({
+    vueAppModalConfirm = new Vue({
         el: '#modal-confirm',
         data: {
             content: ``,
@@ -120,8 +120,6 @@ $(() => {
                 if (vueAppMain.notify) M.toast({
                     html: `You leaved room ${this.delRoom}`,
                     displayLength: 2000,
-                    inDuration: 100,
-                    outDuration: 100,
                 });
             }
         }
@@ -151,8 +149,8 @@ $(() => {
     }
 
     confirmModal = (room) => {
-        vueAppConfirm.content = `Do you want to leave room ${room}?`;
-        vueAppConfirm.delRoom = room;
+        vueAppModalConfirm.content = `Do you want to leave room ${room}?`;
+        vueAppModalConfirm.delRoom = room;
         $('#modal-confirm').modal('open');
     }
 
