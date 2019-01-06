@@ -119,13 +119,17 @@ ul {
     padding-right: 20px;
 }
 
+.switch{
+    display: inline-block;
+}
+
+i.tiny {
+    font-size: 1.5rem;
+}
+
 #messages li {
     display: block;
     margin-bottom: 10px;
-}
-
-#join-room {
-    margin-top: 60px;
 }
 
 .online-users i,
@@ -142,10 +146,7 @@ ul {
     margin-bottom: 20px;
 }
 
-.switch{
+.online-users {
+    margin-bottom: 60px;
     display: inline-block;
-}
-
-i.tiny {
-    font-size: 1.5rem;
 }
