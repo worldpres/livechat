@@ -23,6 +23,6 @@ $(() => {
         }
     });
 
-    $('#modalMessage, #my-nick, #message, #my-room').characterCounter();
+    $('#modal-message #message, #my-nick, #message-send #message, #my-room').characterCounter();
     $('.modal').modal();
 });
