@@ -6,22 +6,21 @@ $(() => {
         vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalPrivMessage('${v}')">chat</i>`).join(', ');
     });
 
-    modalPrivMessage = (to) => {
-        $('#modal-message-priv label').html(`Write Your private message to <span>${to}</span>`);
+    modalPrivMessage = (to, room = false) => {
+        vueAppModal.to = to;
+        vueAppModal.label = `Write Your private message to ${to}`;
+        vueAppModal.message = ``;
         $('#modal-message-priv').modal({
-            onCloseStart: (modal, trigger) => {
-                $('#modal-message-priv #modalMessage').val('').focus().blur();
+            onOpenEnd: (modal) => {
+                $(modal).find('#modalMessage').val(vueAppModal.message).focus();
             }
-        });
-        $('#modal-message-priv').modal('open');
-        $('#modal-message-priv #modalMessage').focus();
+        }).modal('open');
     }
 
     $('#modal-message-priv').on('submit', (e) => {
         e.preventDefault();
-        let msg = $('#modal-message-priv #modalMessage').val();
-        if (/^[^[\]<>]{1,120}$/i.test(msg)) {
-            socket.emit('priv message', $('#modal-message-priv label span').text(), msg);
+        if (/^[^[\]<>]{1,120}$/i.test(vueAppModal.message)) {
+            socket.emit('priv message', vueAppModal.to, vueAppModal.message);
         } else {
             if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,

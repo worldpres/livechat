@@ -138,8 +138,8 @@
 			<form>
 				<div class="modal-content">
 					<div class="input-field">
-						<input type="text" id="modalMessage" autocomplete="off" data-length="120">
-						<label for="modalMessage"></label>
+						<input type="text" id="modalMessage" autocomplete="off" data-length="120" v-model="message">
+						<label for="modalMessage" v-html="label"></label>
 					</div>
 				</div>
 				<div class="modal-footer">
