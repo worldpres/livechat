@@ -44,6 +44,8 @@ $(() => {
             notify: true,
             sound: true,
             autoscroll: true,
+            existingRoomsLength: 0,
+            existingRooms: ``,
         }
     });
 
@@ -90,8 +92,8 @@ $(() => {
     });
 
     ioChat.on('existing rooms', (rooms) => {
-        $('#existing-rooms-length').text(rooms.length);
-        $('#existing-rooms').html(rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', '));
+        vueAppMain.existingRoomsLength = rooms.length;
+        vueAppMain.existingRooms = rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', ');
     });
 
     joinToRoom = (room) => {
