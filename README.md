@@ -5,7 +5,7 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
-
+- save nick
 
 
 ### About WebSocket
