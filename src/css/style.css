@@ -7,6 +7,61 @@
     --whitebgcolor: rgba(255, 255, 255, 0.9);
 }
 
+::-webkit-scrollbar {
+    width: 14px;
+}
+::-webkit-scrollbar-track {
+    background: var(--graylight);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--blue);
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--green);
+}
+
+/* Materialize form colors */
+[type="checkbox"]:checked+span:not(.lever):before {
+    border-right: 2px solid var(--blue) !important;
+    border-bottom: 2px solid var(--blue) !important;
+}
+
+.switch label input[type=checkbox]:checked+.lever {
+    background-color: rgb(119, 187, 243);
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: var(--blue);
+}
+
+.input-field label {
+    color: #000;
+}
+
+.input-field input[type=text]:focus+label {
+    color: var(--blue) !important;
+}
+
+.input-field input[type=text]:focus {
+    border-bottom: 1px solid var(--blue) !important;
+    box-shadow: 0 1px 0 0 var(--blue) !important;
+}
+
+.input-field input[type=text].valid {
+    border-bottom: 1px solid var(--blue) !important;
+    box-shadow: 0 1px 0 0 var(--blue) !important;
+}
+
+.input-field input[type=text].invalid {
+    border-bottom: 1px solid var(--red) !important;
+    box-shadow: 0 1px 0 0 var(--red) !important;
+}
+
+.input-field .prefix.active {
+    color: var(--blue) !important;
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -93,73 +148,4 @@ ul {
 
 i.tiny {
     font-size: 1.5rem;
-}
-
-/* scrollbar */
-/* width */
-::-webkit-scrollbar {
-    width: 14px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: var(--graylight);
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: var(--blue);
-    border-radius: 2px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: var(--green);
-}
-/* Materialize form colors */
-/* checkbox color */
-[type="checkbox"]:checked+span:not(.lever):before {
-    border-right: 2px solid var(--blue) !important;
-    border-bottom: 2px solid var(--blue) !important;
-}
-
-.switch label input[type=checkbox]:checked+.lever {
-    background-color: rgb(119, 187, 243);
-}
-
-.switch label input[type=checkbox]:checked+.lever:after {
-    background-color: var(--blue);
-}
-
-/* label color */
-.input-field label {
-    color: #000;
-}
-
-/* label focus color */
-.input-field input[type=text]:focus+label {
-    color: var(--blue) !important;
-}
-
-/* label underline focus color */
-.input-field input[type=text]:focus {
-    border-bottom: 1px solid var(--blue) !important;
-    box-shadow: 0 1px 0 0 var(--blue) !important;
-}
-
-/* valid color */
-.input-field input[type=text].valid {
-    border-bottom: 1px solid var(--blue) !important;
-    box-shadow: 0 1px 0 0 var(--blue) !important;
-}
-
-/* invalid color */
-.input-field input[type=text].invalid {
-    border-bottom: 1px solid var(--red) !important;
-    box-shadow: 0 1px 0 0 var(--red) !important;
-}
-
-/* icon prefix focus color */
-.input-field .prefix.active {
-    color: var(--blue) !important;
 }

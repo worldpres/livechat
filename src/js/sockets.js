@@ -7,16 +7,16 @@ $(() => {
         el: '#vue-app-main',
         data: {
             myNick: ``,
-            onlineUsers: ``,
             notify: true,
             sound: true,
             autoscroll: true,
+            message: ``,
+            messageSendDisabled: false,
+            onlineUsers: ``,
             existingRoomsLength: 0,
             existingRooms: ``,
             myRoom: ``,
             myRooms: ``,
-            message: ``,
-            messageSendDisabled: false,
         },
         methods: {
             changeNick: function (e) {
@@ -29,6 +29,24 @@ $(() => {
                         displayLength: 2000
                     });
                 }
+                return false;
+            },
+            messageSend: function (e) {
+                e.preventDefault();
+                if (/^[^[\]<>]{1,120}$/i.test(this.message)) {
+                    ioChat.emit('message send', this.message);
+                    this.message = ``;
+                } else {
+                    if (this.notify) M.toast({
+                        html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                        displayLength: 4000,
+                    });
+                }
+                $('#message').focus();
+                this.messageSendDisabled = true;
+                setTimeout(() => {
+                    this.messageSendDisabled = false;
+                }, 2000);
                 return false;
             },
             joinRoom: function (e) {
@@ -55,26 +73,6 @@ $(() => {
             },
             imTyping: function (bool) {
                 ioChat.emit('im typing', bool);
-            },
-            messageSend: function (e) {
-                e.preventDefault();
-                if (/^[^[\]<>]{1,120}$/i.test(this.message)) {
-                    ioChat.emit('message send', this.message);
-                    this.message = ``;
-                } else {
-                    if (vueAppMain.notify) M.toast({
-                        html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
-                        displayLength: 4000,
-                        inDuration: 100,
-                        outDuration: 100,
-                    });
-                }
-                $('#message').focus();
-                this.messageSendDisabled = true;
-                setTimeout(() => {
-                    this.messageSendDisabled = false;
-                }, 2000);
-                return false;
             }
         }
     });
