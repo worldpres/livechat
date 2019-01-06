@@ -6,13 +6,6 @@ $(() => {
         }
     });
 
-    vueAppMain = new Vue({
-        el: '#vue-app-main',
-        data: {
-            onlineUsers: ``,
-        }
-    });
-
     vueAppModal = new Vue({
         el: '#modal-message',
         data: {
@@ -21,6 +14,22 @@ $(() => {
             to: ``,
             room: false,
         }
+    });
+
+    vueAppMain = new Vue({
+        el: '#vue-app-main',
+        data: {
+            onlineUsers: ``,
+            notify: true,
+            sound: true,
+            autoscroll: true,
+        },
+        // methods: {
+        //     switchSound: (s) => {
+        //         this.sound = s;
+        //         console.log(s);
+        //     }
+        // }
     });
 
     $('#modal-message #message, #my-nick, #message-send #message, #my-room').characterCounter();

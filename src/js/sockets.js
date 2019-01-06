@@ -25,7 +25,7 @@ $(() => {
             if (vueAppModal.room) ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
             else socket.emit('priv message', vueAppModal.to, vueAppModal.message);
         } else {
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -39,20 +39,20 @@ $(() => {
         if (!feedback) {
             feedback = 'New private message';
             $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalMessage('${name}')">reply</i>`));
-            if ($('#autoscroll')[0].checked) $('#messages').animate({
+            if (vueAppMain.autoscroll) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
         } else {
             if (feedback == 'yourself') feedback = 'You tried to send message yourself';
             if (feedback == 'regex') feedback = 'Message validation error';
         }
-        if ($('#notify')[0].checked) M.toast({
+        if (vueAppMain.notify) M.toast({
             html: feedback,
             displayLength: 2000,
             inDuration: 100,
             outDuration: 100,
         });
-        if ($('#sound')[0].checked) playSound(40, 1000, 'square', 0.3, false);
+        if (vueAppMain.sound) playSound(40, 1000, 'square', 0.3, false);
     });
 
     ioChat.on('existing rooms', (rooms) => {
@@ -70,7 +70,7 @@ $(() => {
 
     ioChat.on('nick changed or not', (nick, changed) => {
         if (!changed) {
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
@@ -95,7 +95,7 @@ $(() => {
         if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(nick)) {
             ioChat.emit('nick change', nick);
         } else {
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
@@ -123,7 +123,7 @@ $(() => {
             ioChat.emit('message send', msg);
             $('#message').val('');
         } else {
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -141,19 +141,19 @@ $(() => {
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
         if (feedback) {
             $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i> <small>(${new Date(date).toLocaleString('pl-PL')})</small> ${name} : <em>${msg}</em>`));
-            if ($('#autoscroll')[0].checked) $('#messages').animate({
+            if (vueAppMain.autoscroll) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
             $('#message').blur().focus();
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: 'New message',
                 displayLength: 1000,
                 inDuration: 100,
                 outDuration: 100,
             });
-            if ($('#sound')[0].checked) playSound(); //time, freq, type, volume
+            if (vueAppMain.sound) playSound(); //time, freq, type, volume
         } else {
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
                 displayLength: 4000,
                 inDuration: 100,
@@ -169,14 +169,14 @@ $(() => {
         if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
             ioChat.emit('room join', room);
             $('#my-room').val('').focus().blur();
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `You joined to room ${room}`,
                 displayLength: 2000,
                 inDuration: 100,
                 outDuration: 100,
             });
         } else {
-            if ($('#notify')[0].checked) M.toast({
+            if (vueAppMain.notify) M.toast({
                 html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                 displayLength: 2000,
                 inDuration: 100,
@@ -194,7 +194,7 @@ $(() => {
         let room = $('#modal-confirm .modal-content span').text();
         ioChat.emit('leave room', room);
         $('#modal-confirm').modal('close');
-        if ($('#notify')[0].checked) M.toast({
+        if (vueAppMain.notify) M.toast({
             html: `You leaved room ${room}`,
             displayLength: 2000,
             inDuration: 100,
@@ -204,15 +204,15 @@ $(() => {
 
     ioChat.on('message to room', (name, date, msg, to) => {
         $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalMessage('${to}', true)">reply_all</i>`));
-        if ($('#autoscroll')[0].checked) $('#messages').animate({
+        if (vueAppMain.autoscroll) $('#messages').animate({
             scrollTop: $('#messages')[0].scrollHeight
         }, 600);
-        if ($('#notify')[0].checked) M.toast({
+        if (vueAppMain.notify) M.toast({
             html: `New message to ${to} room`,
             displayLength: 2000,
             inDuration: 100,
             outDuration: 100,
         });
-        if ($('#sound')[0].checked) playSound(1000, 3000, 'sawtooth', 0.3, true);
+        if (vueAppMain.sound) playSound(1000, 3000, 'sawtooth', 0.3, true);
     });
 });
