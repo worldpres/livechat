@@ -13,9 +13,9 @@ $(() => {
             message: ``,
             messageSendDisabled: false,
             onlineUsers: ``,
+            myRoom: ``,
             existingRoomsLength: 0,
             existingRooms: ``,
-            myRoom: ``,
             myRooms: ``,
         },
         methods: {
@@ -53,14 +53,12 @@ $(() => {
                 e.preventDefault();
                 if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myRoom)) {
                     ioChat.emit('room join', this.myRoom);
-                    $('#my-room').val('').focus().blur();
                     if (this.notify) M.toast({
                         html: `You joined to room ${this.myRoom}`,
                         displayLength: 2000,
-                        inDuration: 100,
-                        outDuration: 100,
                     });
                     this.myRoom = ``;
+                    $('#my-room').val(this.myRoom).focus().blur();
                 } else {
                     if (this.notify) M.toast({
                         html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
