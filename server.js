@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
 			let toId = users.find(v => v.name == to).id;
 			if (toId != socket.id) {
 				let name = users.find(v => v.id == socket.id).name;
-				let date = new Date().toLocaleString('pl-PL');
+				let date = new Date().getTime();
 				socket.broadcast.to(toId).emit('priv message', name, date, msg, to);
 				socket.emit('priv message', name, date, msg, to);
 			} else {
@@ -148,7 +148,7 @@ ioChat.on('connection', (socket) => {
 	socket.on('message to room', (to, msg) => {
 		if (/^[^[\]<>]{1,120}$/i.test(msg) && users.find(v => v.id == id).rooms.filter(v => v == to).length == 1) {
 			let name = users.find(v => v.id == id).name;
-			let date = new Date().toLocaleString('pl-PL');
+			let date = new Date().getTime();
 			socket.broadcast.to(to).emit('message to room', name, date, msg, to);
 			socket.emit('message to room', name, date, msg, to);
 		}
