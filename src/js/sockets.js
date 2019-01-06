@@ -80,7 +80,7 @@ $(() => {
 
     ioChat.on('previous messages', (messages) => {
         if (messages.length) {
-            $('#messages').html(messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i>${v.name} (${v.date}) : ${v.msg}</li>`).join(''));
+            $('#messages').html(messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i> <small>(${v.date})</small> ${v.name} : <em>${v.msg}</em></li>`).join(''));
             $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
