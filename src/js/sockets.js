@@ -126,7 +126,7 @@ $(() => {
     });
 
 
-    $('#modal-message #message, #my-nick, #message-send #message, #my-room').characterCounter();
+    $('#my-nick, #message-send #message, #my-room, #modal-message #message').characterCounter();
     $('.modal').modal();
 
 
