@@ -3,60 +3,6 @@ $(() => {
     let socket = io();
     let ioChat = io('/chat');
 
-    vueAppFooter = new Vue({
-        el: '#footer',
-        data: {
-            copyYear: new Date().getFullYear(),
-        }
-    });
-
-    vueAppConfirm = new Vue({
-        el: '#modal-confirm',
-        data: {
-            content: ``,
-            delRoom: ``,
-        },
-        methods: {
-            confirmed: function () {
-                ioChat.emit('leave room', this.delRoom);
-                $('#modal-confirm').modal('close');
-                if (vueAppMain.notify) M.toast({
-                    html: `You leaved room ${this.delRoom}`,
-                    displayLength: 2000,
-                    inDuration: 100,
-                    outDuration: 100,
-                });
-            }
-        }
-    });
-
-    vueAppModal = new Vue({
-        el: '#modal-message',
-        data: {
-            label: ``,
-            message: ``,
-            to: ``,
-            room: false,
-        },
-        methods: {
-            modalMessageSend: function (e) {
-                e.preventDefault();
-                if (/^[^[\]<>]{1,120}$/i.test(this.message)) {
-                    if (this.room) ioChat.emit('message to room', this.to, this.message);
-                    else socket.emit('priv message', this.to, this.message);
-                } else {
-                    if (vueAppMain.notify) M.toast({
-                        html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
-                        displayLength: 4000,
-                        inDuration: 100,
-                        outDuration: 100,
-                    });
-                }
-                $('#modal-message').modal('close');
-            }
-        }
-    });
-
     vueAppMain = new Vue({
         el: '#vue-app-main',
         data: {
@@ -98,14 +44,64 @@ $(() => {
         }
     });
 
+    vueAppFooter = new Vue({
+        el: '#footer',
+        data: {
+            copyYear: new Date().getFullYear(),
+        }
+    });
+
+    vueAppModal = new Vue({
+        el: '#modal-message',
+        data: {
+            label: ``,
+            message: ``,
+            to: ``,
+            room: false,
+        },
+        methods: {
+            modalMessageSend: function (e) {
+                e.preventDefault();
+                if (/^[^[\]<>]{1,120}$/i.test(this.message)) {
+                    if (this.room) ioChat.emit('message to room', this.to, this.message);
+                    else socket.emit('priv message', this.to, this.message);
+                } else {
+                    if (vueAppMain.notify) M.toast({
+                        html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
+                        displayLength: 4000,
+                        inDuration: 100,
+                        outDuration: 100,
+                    });
+                }
+                $('#modal-message').modal('close');
+            }
+        }
+    });
+
+    vueAppConfirm = new Vue({
+        el: '#modal-confirm',
+        data: {
+            content: ``,
+            delRoom: ``,
+        },
+        methods: {
+            confirmed: function () {
+                ioChat.emit('leave room', this.delRoom);
+                $('#modal-confirm').modal('close');
+                if (vueAppMain.notify) M.toast({
+                    html: `You leaved room ${this.delRoom}`,
+                    displayLength: 2000,
+                    inDuration: 100,
+                    outDuration: 100,
+                });
+            }
+        }
+    });
+
 
     $('#modal-message #message, #my-nick, #message-send #message, #my-room').characterCounter();
     $('.modal').modal();
 
-
-    socket.on('online users', (users) => {
-        vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalMessage('${v}')">chat</i>`).join(', ');
-    });
 
     modalMessage = (to, room = false) => {
         vueAppModal.label = `Write Your private message to ${to}`;
@@ -119,6 +115,22 @@ $(() => {
             }
         }).modal('open');
     }
+
+    joinToRoom = (room) => {
+        vueAppMain.myRoom = room.split('(')[0];
+        $('#my-room').focus();
+    }
+
+    confirmModal = (room) => {
+        vueAppConfirm.content = `Do you want to leave room ${room}?`;
+        vueAppConfirm.delRoom = room;
+        $('#modal-confirm').modal('open');
+    }
+    
+
+    socket.on('online users', (users) => {
+        vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalMessage('${v}')">chat</i>`).join(', ');
+    });
 
     socket.on('priv message', (name, date, msg, from, feedback = false) => {
         if (!feedback) {
@@ -144,11 +156,6 @@ $(() => {
         vueAppMain.existingRoomsLength = rooms.length;
         vueAppMain.existingRooms = rooms.map(v => `<span onclick="joinToRoom('${v}')">${v}</span>`).join(', ');
     });
-
-    joinToRoom = (room) => {
-        vueAppMain.myRoom = room.split('(')[0];
-        $('#my-room').focus();
-    }
 
     ioChat.on('my rooms', (rooms) => {
         vueAppMain.myRooms = rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', ');
@@ -242,12 +249,6 @@ $(() => {
             $('#message').focus();
         }
     });
-
-    confirmModal = (room) => {
-        vueAppConfirm.content = `Do you want to leave room ${room}?`;
-        vueAppConfirm.delRoom = room;
-        $('#modal-confirm').modal('open');
-    }
 
     ioChat.on('message to room', (name, date, msg, to) => {
         $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalMessage('${to}', true)">reply_all</i>`));
