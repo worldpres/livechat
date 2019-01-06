@@ -143,15 +143,15 @@ $(() => {
         }).modal('open');
     }
 
-    joinToRoom = (room) => {
-        vueAppMain.myRoom = room.split('(')[0];
-        $('#my-room').focus();
-    }
-
-    confirmModal = (room) => {
+    modalConfirm = (room) => {
         vueAppModalConfirm.content = `Do you want to leave room ${room}?`;
         vueAppModalConfirm.delRoom = room;
         $('#modal-confirm').modal('open');
+    }
+
+    joinToRoom = (room) => {
+        vueAppMain.myRoom = room.split('(')[0];
+        $('#my-room').focus();
     }
 
 
@@ -185,7 +185,7 @@ $(() => {
     });
 
     ioChat.on('my rooms', (rooms) => {
-        vueAppMain.myRooms = rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', ');
+        vueAppMain.myRooms = rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="modalConfirm('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', ');
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {
