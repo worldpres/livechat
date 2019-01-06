@@ -187,14 +187,12 @@ $(() => {
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {
-        if (!changed) {
-            if (vueAppMain.notify) M.toast({
-                html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
-                displayLength: 2000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        }
+        if (changed) feedback = `Your nick is changed`;
+        else feedback = `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`;
+        if (vueAppMain.notify) M.toast({
+            html: feedback,
+            displayLength: 2000,
+        });
         $('#my-nick').attr('placeholder', nick).val('').focus().blur();
     });
 
