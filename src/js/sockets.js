@@ -159,10 +159,10 @@ $(() => {
         vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalMessage('${v}')">chat</i>`).join(', ');
     });
 
-    socket.on('priv message', (name, date, msg, from, feedback = false) => {
+    socket.on('priv message', (name, date, msg, to, feedback = false) => {
         if (!feedback) {
             feedback = 'New private message';
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalMessage('${name}')">reply</i>`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalMessage('${name}')">reply</i>`));
             if (vueAppMain.autoscroll) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -173,8 +173,6 @@ $(() => {
         if (vueAppMain.notify) M.toast({
             html: feedback,
             displayLength: 2000,
-            inDuration: 100,
-            outDuration: 100,
         });
         if (vueAppMain.sound) playSound(40, 1000, 'square', 0.3, false);
     });
