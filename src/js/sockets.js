@@ -50,7 +50,7 @@ $(() => {
             inDuration: 100,
             outDuration: 100,
         });
-        playSound(40, 1000, 'square', 0.3, false);
+        if ($('#sound')[0].checked) playSound(40, 1000, 'square', 0.3, false);
     });
 
     ioChat.on('existing rooms', (rooms) => {
@@ -149,7 +149,7 @@ $(() => {
                 inDuration: 100,
                 outDuration: 100,
             });
-            playSound(); //time, freq, type, volume
+            if ($('#sound')[0].checked) playSound(); //time, freq, type, volume
         } else {
             M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
@@ -237,6 +237,6 @@ $(() => {
             inDuration: 100,
             outDuration: 100,
         });
-        playSound(1000, 3000, 'sawtooth', 0.3, true);
+        if ($('#sound')[0].checked) playSound(1000, 3000, 'sawtooth', 0.3, true);
     });
 });

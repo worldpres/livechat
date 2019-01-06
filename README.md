@@ -5,7 +5,8 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
-
+- format danych w bazie
+- switch dla dzieku i notyfikacji
 
 ### About WebSocket
 

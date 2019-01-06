@@ -78,6 +78,11 @@ ul {
     font-style: italic;
     color: gray;
     font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.switch{
+    display: inline-block;
 }
 
 /* scrollbar */
