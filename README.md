@@ -5,8 +5,8 @@
 **BACK**: *NodeJS* + *Socket.IO* + *AudioContext* + *MongoDB*
 
 ## TODO
-- format danych w bazie
-- room message nie wyswietla u wysylajacego
+
+
 
 ### About WebSocket
 

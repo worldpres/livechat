@@ -64,6 +64,11 @@ ul {
     padding-right: 20px;
 }
 
+#messages li {
+    display: block;
+    margin-bottom: 10px;
+}
+
 #join-room {
     margin-top: 60px;
 }

@@ -100,8 +100,8 @@ ioChat.on('connection', (socket) => {
 				if (err) throw err;
 				var dbo = db.db('livechat');
 				var query = {
-					name: name,
 					date: date,
+					name: name,
 					msg: msg
 				};
 				try {

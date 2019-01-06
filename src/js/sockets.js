@@ -36,7 +36,7 @@ $(() => {
     socket.on('priv message', (name, date, msg, from, feedback = false) => {
         if (!feedback) {
             feedback = 'New private message';
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i>${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} (${date}) : ${msg}`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} : <em>${msg}</em>`));
             if ($('#autoscroll')[0].checked) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -138,7 +138,7 @@ $(() => {
 
     ioChat.on('message sent', (name, date, msg, feedback = true) => {
         if (feedback) {
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i>${name} (${date}) : ${msg}`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons grey-text">mail</i> <small>(${date})</small> ${name} : <em>${msg}</em>`));
             if ($('#autoscroll')[0].checked) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -227,7 +227,7 @@ $(() => {
     })
 
     ioChat.on('message to room', (name, date, msg, to) => {
-        $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i>${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} (${date}) : ${msg}`));
+        $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em>`));
         if ($('#autoscroll')[0].checked) $('#messages').animate({
             scrollTop: $('#messages')[0].scrollHeight
         }, 600);
