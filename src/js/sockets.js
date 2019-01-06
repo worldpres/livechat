@@ -62,7 +62,7 @@ $(() => {
     }
 
     ioChat.on('my rooms', (rooms) => {
-        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="messageToRoom('${v}')"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
+        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="modalRoomMessage('${v}')"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {
@@ -199,11 +199,11 @@ $(() => {
         });
     });
 
-    messageToRoom = (to) => {
+    modalRoomMessage = (to) => {
         $('#modal-message-room label').html(`Write Your message to room <span>${to}</span>`);
         $('#modal-message-room').modal({
             onCloseStart: (modal, trigger) => {
-                $('#modal #modalMessage').val('').focus().blur();
+                $('#modal-message-room #modalMessage').val('').focus().blur();
             }
         });
         $('#modal-message-room').modal('open');
