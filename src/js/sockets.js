@@ -10,9 +10,9 @@ $(() => {
         vueAppModal.label = `Write Your private message to ${to}`;
         vueAppModal.to = to;
         vueAppModal.message = ``;
+        vueAppModal.room = room;
         if (room) {
             vueAppModal.label = `Write Your message to room ${to}`;
-            vueAppModal.room = room;
         }
         $('#modal-message').modal({
             onOpenEnd: (modal) => {
