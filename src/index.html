@@ -133,32 +133,12 @@
 		Dominik Pres &copy; {{copyYear}}
 	</footer>
 
-	<div id="modal">
-		<div id="modal-message-priv" class="modal">
-			<form>
-				<div class="modal-content">
-					<div class="input-field">
-						<input type="text" id="modalMessage" autocomplete="off" data-length="120" v-model="message">
-						<label for="modalMessage" v-html="label"></label>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<a href="#!" class="modal-close waves-effect waves-light btn-small red left">Close</a>
-					<button class="waves-effect waves-light btn-small green right">
-						<i class="material-icons right">send</i>
-						Send
-					</button>
-				</div>
-			</form>
-		</div>
-	</div>
-
-	<div id="modal-message-room" class="modal">
+	<div id="modal-message" class="modal">
 		<form>
 			<div class="modal-content">
 				<div class="input-field">
-					<input type="text" id="modalMessage" autocomplete="off" data-length="120">
-					<label for="modalMessage"></label>
+					<input type="text" id="message" autocomplete="off" data-length="120" v-model="message">
+					<label for="message" v-html="label"></label>
 				</div>
 			</div>
 			<div class="modal-footer">

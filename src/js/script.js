@@ -14,11 +14,12 @@ $(() => {
     });
 
     vueAppModal = new Vue({
-        el: '#modal',
+        el: '#modal-message',
         data: {
             label: ``,
             message: ``,
             to: ``,
+            room: false,
         }
     });
 

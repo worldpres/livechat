@@ -3,24 +3,32 @@ $(() => {
     let ioChat = io('/chat');
 
     socket.on('online users', (users) => {
-        vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalPrivMessage('${v}')">chat</i>`).join(', ');
+        vueAppMain.onlineUsers = users.map(v => `${v}<i class="material-icons orange-text" onclick="modalMessage('${v}')">chat</i>`).join(', ');
     });
 
-    modalPrivMessage = (to, room = false) => {
-        vueAppModal.to = to;
+    modalMessage = (to, room = false) => {
         vueAppModal.label = `Write Your private message to ${to}`;
+        vueAppModal.to = to;
         vueAppModal.message = ``;
-        $('#modal-message-priv').modal({
+        if (room) {
+            vueAppModal.label = `Write Your message to room ${to}`;
+            vueAppModal.room = room;
+        }
+        $('#modal-message').modal({
             onOpenEnd: (modal) => {
-                $(modal).find('#modalMessage').val(vueAppModal.message).focus();
+                $(modal).find('#message').val(vueAppModal.message).focus();
             }
         }).modal('open');
     }
 
-    $('#modal-message-priv').on('submit', (e) => {
+    $('#modal-message').on('submit', (e) => {
         e.preventDefault();
         if (/^[^[\]<>]{1,120}$/i.test(vueAppModal.message)) {
-            socket.emit('priv message', vueAppModal.to, vueAppModal.message);
+            if (vueAppModal.room) {
+                ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
+            } else {
+                socket.emit('priv message', vueAppModal.to, vueAppModal.message);
+            }
         } else {
             if ($('#notify')[0].checked) M.toast({
                 html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
@@ -29,13 +37,13 @@ $(() => {
                 outDuration: 100,
             });
         }
-        $('#modal-message-priv').modal('close');
+        $('#modal-message').modal('close');
     })
 
     socket.on('priv message', (name, date, msg, from, feedback = false) => {
         if (!feedback) {
             feedback = 'New private message';
-            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalPrivMessage('${name}')">reply</i>`));
+            $('#messages').append($('<li>').html(`<i class="tiny material-icons orange-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons orange-text">trending_flat</i> ${from} : <em>${msg}</em> <i class="reply tiny material-icons orange-text" onclick="modalMessage('${name}')">reply</i>`));
             if ($('#autoscroll')[0].checked) $('#messages').animate({
                 scrollTop: $('#messages')[0].scrollHeight
             }, 600);
@@ -62,7 +70,7 @@ $(() => {
     }
 
     ioChat.on('my rooms', (rooms) => {
-        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="modalRoomMessage('${v}')"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
+        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {
@@ -199,34 +207,8 @@ $(() => {
         });
     });
 
-    modalRoomMessage = (to) => {
-        $('#modal-message-room label').html(`Write Your message to room <span>${to}</span>`);
-        $('#modal-message-room').modal({
-            onCloseStart: (modal, trigger) => {
-                $('#modal-message-room #modalMessage').val('').focus().blur();
-            }
-        });
-        $('#modal-message-room').modal('open');
-        $('#modal-message-room #modalMessage').focus();
-    }
-    $('#modal-message-room').on('submit', (e) => {
-        e.preventDefault();
-        let msg = $('#modal-message-room #modalMessage').val();
-        if (/^[^[\]<>]{1,120}$/i.test(msg)) {
-            ioChat.emit('message to room', $('#modal-message-room label span').text(), msg);
-        } else {
-            if ($('#notify')[0].checked) M.toast({
-                html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
-                displayLength: 4000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        }
-        $('#modal-message-room').modal('close');
-    })
-
     ioChat.on('message to room', (name, date, msg, to) => {
-        $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalRoomMessage('${to}')">reply_all</i>`));
+        $('#messages').append($('<li>').html(`<i class="tiny material-icons green-text">mail</i> <small>(${date})</small> ${name} <i class="tiny material-icons green-text">trending_flat</i> ${to} : <em>${msg}</em> <i class="reply tiny material-icons green-text" onclick="modalMessage('${to}', true)">reply_all</i>`));
         if ($('#autoscroll')[0].checked) $('#messages').animate({
             scrollTop: $('#messages')[0].scrollHeight
         }, 600);
