@@ -1,5 +1,5 @@
 $(() => {
-    
+
     let socket = io();
     let ioChat = io('/chat');
 
@@ -19,11 +19,11 @@ $(() => {
             room: false,
         },
         methods: {
-            modalMessageSend: (e) => {
+            modalMessageSend: function (e) {
                 e.preventDefault();
-                if (/^[^[\]<>]{1,120}$/i.test(vueAppModal.message)) {
-                    if (vueAppModal.room) ioChat.emit('message to room', vueAppModal.to, vueAppModal.message);
-                    else socket.emit('priv message', vueAppModal.to, vueAppModal.message);
+                if (/^[^[\]<>]{1,120}$/i.test(this.message)) {
+                    if (this.room) ioChat.emit('message to room', this.to, this.message);
+                    else socket.emit('priv message', this.to, this.message);
                 } else {
                     if (vueAppMain.notify) M.toast({
                         html: `The message can't be empty, <br>may have max 120 chars <br>and can't contain: [ ] < >`,
@@ -46,6 +46,32 @@ $(() => {
             autoscroll: true,
             existingRoomsLength: 0,
             existingRooms: ``,
+            myRoom: ``,
+            myRooms: ``,
+        },
+        methods: {
+            joinRoom: function (e) {
+                e.preventDefault();
+                if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myRoom)) {
+                    ioChat.emit('room join', this.myRoom);
+                    this.myRoom = ``;
+                    $('#my-room').val('').focus().blur();
+                    if (this.notify) M.toast({
+                        html: `You joined to room ${this.myRoom}`,
+                        displayLength: 2000,
+                        inDuration: 100,
+                        outDuration: 100,
+                    });
+                } else {
+                    if (this.notify) M.toast({
+                        html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
+                        displayLength: 2000,
+                        inDuration: 100,
+                        outDuration: 100,
+                    });
+                }
+                return false;
+            }
         }
     });
 
@@ -97,11 +123,12 @@ $(() => {
     });
 
     joinToRoom = (room) => {
-        $('#my-room').val(room.split('(')[0]).focus();
+        vueAppMain.myRoom = room.split('(')[0];
+        $('#my-room').focus();
     }
 
     ioChat.on('my rooms', (rooms) => {
-        $('#my-rooms').html(rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', '));
+        vueAppMain.myRooms = rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="confirmModal('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', ');
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {
@@ -197,29 +224,6 @@ $(() => {
             });
             $('#message').focus();
         }
-    });
-
-    $('#join-room').submit((e) => {
-        e.preventDefault();
-        let room = $('#my-room').val();
-        if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
-            ioChat.emit('room join', room);
-            $('#my-room').val('').focus().blur();
-            if (vueAppMain.notify) M.toast({
-                html: `You joined to room ${room}`,
-                displayLength: 2000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        } else {
-            if (vueAppMain.notify) M.toast({
-                html: `Room name can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
-                displayLength: 2000,
-                inDuration: 100,
-                outDuration: 100,
-            });
-        }
-        return false;
     });
 
     confirmModal = (room) => {
