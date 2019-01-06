@@ -129,7 +129,7 @@ ul {
 }
 
 .online-users i,
-#existing-rooms span,
+.existing-rooms span,
 .my-rooms span,
 #messages .reply {
     cursor: pointer;
