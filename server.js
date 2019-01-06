@@ -145,6 +145,15 @@ ioChat.on('connection', (socket) => {
 		}
 	});
 
+	socket.on('message to room', (to, msg) => {
+		if (/^[^[\]<>]{1,120}$/i.test(msg) && users.find(v => v.id == id).rooms.filter(v => v == to).length == 1) {
+			let name = users.find(v => v.id == id).name;
+			let date = new Date().toLocaleString('pl-PL');
+			socket.broadcast.to(to).emit('message to room', name, date, msg, to);
+			socket.emit('message to room', name, date, msg, to);
+		}
+	});
+
 	socket.on('room join', (room) => {
 		if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
 			socket.join(room);
@@ -162,15 +171,6 @@ ioChat.on('connection', (socket) => {
 			users.find(v => v.id == id).rooms = users.find(v => v.id == id).rooms.filter(v => v != room);
 			socket.emit('my rooms', users.find(v => v.id == id).rooms);
 			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
-		}
-	});
-
-	socket.on('message to room', (to, msg) => {
-		if (/^[^[\]<>]{1,120}$/i.test(msg) && users.find(v => v.id == id).rooms.filter(v => v == to).length == 1) {
-			let name = users.find(v => v.id == id).name;
-			let date = new Date().toLocaleString('pl-PL');
-			socket.broadcast.to(to).emit('message to room', name, date, msg, to);
-			socket.emit('message to room', name, date, msg, to);
 		}
 	});
 });

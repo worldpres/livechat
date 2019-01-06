@@ -237,8 +237,6 @@ $(() => {
         if (vueAppMain.notify) M.toast({
             html: `New message to ${to} room`,
             displayLength: 2000,
-            inDuration: 100,
-            outDuration: 100,
         });
         if (vueAppMain.sound) playSound(1000, 3000, 'sawtooth', 0.3, true);
     });
