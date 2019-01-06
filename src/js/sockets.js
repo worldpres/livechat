@@ -50,7 +50,7 @@ $(() => {
             inDuration: 100,
             outDuration: 100,
         });
-        playSound(10, 1000, 'square', 0.3, false);
+        playSound(40, 1000, 'square', 0.3, false);
     });
 
     ioChat.on('existing rooms', (rooms) => {
