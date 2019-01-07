@@ -184,6 +184,10 @@ $(() => {
         ioChat.emit('nick change', (localStorage.myNick)?localStorage.myNick:false);
     });
 
+    ioChat.on('do you have any rooms?', () => {
+        ioChat.emit('i have rooms', (localStorage.myRooms)?localStorage.myRooms:false);
+    });
+
     ioChat.on('existing rooms', (rooms) => {
         vueAppMain.existingRoomsLength = rooms.length;
         vueAppMain.existingRooms = rooms.map(v => `<span onclick="quickJoinToRoom('${v}')">${v}</span>`).join(', ');
@@ -191,6 +195,7 @@ $(() => {
 
     ioChat.on('my rooms', (rooms) => {
         vueAppMain.myRooms = rooms.map(v => `${v}<span onclick="modalMessage('${v}', true)"><i class="material-icons green-text">chat</i></span> <span onclick="modalConfirm('${v}')"><i class="material-icons red-text">delete_forever</i></span>`).join(', ');
+        localStorage.myRooms = rooms;
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {

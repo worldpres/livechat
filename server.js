@@ -84,11 +84,24 @@ let ioChat = io.of('/chat');
 ioChat.on('connection', (socket) => {
 	const id = socket.id.substr(socket.id.indexOf('#') + 1);
 
-	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
-
-	socket.emit('my rooms', users.find(v => v.id == id).rooms);
-
 	socket.emit('do i know you');
+
+	socket.emit('do you have any rooms?');
+
+	socket.on('i have rooms', (clientRooms) => {
+		if(clientRooms){
+			clientRooms.split(',').map(room=>{
+				if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(room)) {
+					socket.join(room);
+					if (users.find(v => v.id == id).rooms.filter(v => v == room).length == 0) {
+						users.find(v => v.id == id).rooms.push(room);
+					}
+				}
+			});
+			socket.emit('my rooms', users.find(v => v.id == id).rooms);
+			ioChat.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
+		}		
+	});
 
 	MongoClient.connect(url, {
 		useNewUrlParser: true,
