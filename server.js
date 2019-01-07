@@ -84,6 +84,8 @@ let ioChat = io.of('/chat');
 ioChat.on('connection', (socket) => {
 	const id = socket.id.substr(socket.id.indexOf('#') + 1);
 
+	socket.emit('existing rooms', Object.getOwnPropertyNames(ioChat.adapter.rooms).filter(v => v[0] != '/').map(v => `${v}(${ioChat.adapter.rooms[v].length})`));
+
 	socket.emit('do i know you');
 
 	socket.emit('do you have any rooms?');
