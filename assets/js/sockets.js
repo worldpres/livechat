@@ -201,9 +201,11 @@ $(() => {
     ioChat.on('previous messages', (messages) => {
         if (messages.length) {
             vueAppMain.messages = messages.map(v => `<li><i class="tiny material-icons grey-text">mail</i> <small>(${new Date(v.date).toLocaleString('pl-PL')})</small> ${v.name} : <em>${v.msg}</em></li>`).join('');
-            $('#messages').animate({
-                scrollTop: $('#messages')[0].scrollHeight
-            }, 600);
+            setTimeout(()=>{
+                if (vueAppMain.autoscroll) $('#messages').animate({
+                    scrollTop: $('#messages')[0].scrollHeight
+                }, 600);
+            }, 10);
         }
     });
 

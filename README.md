@@ -4,7 +4,6 @@
 
 ## TODO
 
-- fix autoscroll
 - fix nick after reconnect
 
 ## FRONTEND
