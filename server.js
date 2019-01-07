@@ -88,7 +88,7 @@ ioChat.on('connection', (socket) => {
 
 	socket.emit('my rooms', users.find(v => v.id == id).rooms);
 
-	socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
+	socket.emit('do i know you');
 
 	MongoClient.connect(url, {
 		useNewUrlParser: true,
@@ -104,12 +104,16 @@ ioChat.on('connection', (socket) => {
 	});
 
 	socket.on('nick change', (nick) => {
-		if (/^[a-ząćęłńóśźż0-9_-]{1,20}$/i.test(nick)) {
-			users.find(v => v.id == id).name = nick;
-			io.emit('online users', users.map(v => v.name));
-			socket.emit('nick changed or not', nick, true);
-		} else {
-			socket.emit('nick changed or not', users.find(v => v.id == id).name, false);
+		if(!nick){
+			socket.emit('nick changed or not', users.find(v => v.id == id).name, true);
+		}else{
+			if (/^[a-ząćęłńóśźż0-9_-]{1,20}$/i.test(nick)) {
+				users.find(v => v.id == id).name = nick;
+				io.emit('online users', users.map(v => v.name));
+				socket.emit('nick changed or not', nick, true);
+			} else {
+				socket.emit('nick changed or not', users.find(v => v.id == id).name, false);
+			}
 		}
 	});
 

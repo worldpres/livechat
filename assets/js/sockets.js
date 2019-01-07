@@ -180,6 +180,10 @@ $(() => {
         if (vueAppMain.sound) playSound(40, 1000, 'square', 0.3, false);
     });
 
+    ioChat.on('do i know you', () => {
+        ioChat.emit('nick change', (localStorage.myNick)?localStorage.myNick:false);
+    });
+
     ioChat.on('existing rooms', (rooms) => {
         vueAppMain.existingRoomsLength = rooms.length;
         vueAppMain.existingRooms = rooms.map(v => `<span onclick="quickJoinToRoom('${v}')">${v}</span>`).join(', ');
@@ -190,13 +194,14 @@ $(() => {
     });
 
     ioChat.on('nick changed or not', (nick, changed) => {
-        if (changed) feedback = `Your nick is changed`;
+        if (changed) feedback = `Welcome ${nick}`;
         else feedback = `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`;
         if (vueAppMain.notify) M.toast({
             html: feedback,
             displayLength: 2000,
         });
         vueAppMain.myNick = nick;
+        localStorage.myNick = nick;
         $('#my-nick ~ .character-counter').text(`${nick.length}/20`);
     });
 
