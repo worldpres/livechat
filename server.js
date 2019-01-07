@@ -104,7 +104,7 @@ ioChat.on('connection', (socket) => {
 	});
 
 	socket.on('nick change', (nick) => {
-		if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(nick)) {
+		if (/^[a-ząćęłńóśźż0-9_-]{1,20}$/i.test(nick)) {
 			users.find(v => v.id == id).name = nick;
 			io.emit('online users', users.map(v => v.name));
 			socket.emit('nick changed or not', nick, true);

@@ -23,13 +23,14 @@ $(() => {
         methods: {
             changeNick: function (e) {
                 e.preventDefault();
-                if (/^[a-ząćęłńóśźż0-9_-]{1,10}$/i.test(this.myNick)) {
+                if (/^[a-ząćęłńóśźż0-9_-]{1,20}$/i.test(this.myNick)) {
                     ioChat.emit('nick change', this.myNick);
                 } else {
                     if (this.notify) M.toast({
                         html: `Nickname can't be empty, <br>but can contain (max 10 chars): <br>a-z, ą, ć, ę, ł, ń, ó, ś, ź, ż, 0-9, _, -`,
                         displayLength: 2000
                     });
+                    $('#my-nick').focus();
                 }
                 return false;
             },
@@ -195,7 +196,8 @@ $(() => {
             html: feedback,
             displayLength: 2000,
         });
-        $('#my-nick').attr('placeholder', nick).val('').focus().blur();
+        vueAppMain.myNick = nick;
+        $('#my-nick ~ .character-counter').text(`${nick.length}/20`);
     });
 
     ioChat.on('previous messages', (messages) => {

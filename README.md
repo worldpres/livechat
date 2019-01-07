@@ -2,10 +2,6 @@
 
 **Live Chat** for quick sending messages
 
-## TODO
-
-- fix nick after reconnect
-
 ## FRONTEND
 
 - *HTML*,
