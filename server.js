@@ -11,7 +11,7 @@ http.listen(port, () => {
 	console.log(`listening on ${ip.address()}:${port}`);
 });
 
-app.use(express.static(__dirname + '/src'));
+app.use(express.static(__dirname + '/assets'));
 
 app.get('/', (req, res) => {
 	res.sendFile(`index.html`);
