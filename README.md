@@ -8,7 +8,7 @@
 2. Install Node.js
 3. Type `npm i` to install packages
 4. Type `nodemon` or `node server.js` to run
-5. Open `http://localhost:3000`
+5. Open [http://localhost:3000](http://localhost:3000 "http://localhost:3000")
 6. Ready to use
 
 ## FRONTEND
