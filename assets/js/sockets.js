@@ -155,6 +155,7 @@ $(() => {
     quickJoinToRoom = (room) => {
         vueAppMain.myRoom = room.split('(')[0];
         $('#my-room').focus();
+        $('#my-room ~ .character-counter').text(`${vueAppMain.myRoom}/10`);
     }
 
 
